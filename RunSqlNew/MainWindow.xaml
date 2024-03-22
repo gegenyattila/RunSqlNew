@@ -4,9 +4,66 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RunSqlNew"
+        xmlns:local1="clr-namespace:RunSqlNew.ViewModels"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <Grid>
+    <Window.DataContext>
+        <local1:MainWindowViewModel/>
+    </Window.DataContext>
 
+    <Grid Background="#009EB3">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="4*"/>
+            <RowDefinition Height="6*"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0" Name="Values" HorizontalAlignment="Stretch" AllowDrop="False">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <DataGrid ItemsSource="{Binding Datas}" Background="#7B7B7B" AllowDrop="False" 
+                      ScrollViewer.CanContentScroll="True" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                      >
+                <DataGrid.CellStyle>
+                    <Style TargetType="DataGridCell">
+                        <Style.Triggers>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter Property="Background" Value="SeaGreen"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </DataGrid.CellStyle>
+            </DataGrid>
+
+            <!--
+            <ListBox Name="DataTypes" Grid.Row="0" HorizontalAlignment="Stretch" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Right" 
+                     Background="#ABE5FF">
+                <ListBoxItem HorizontalContentAlignment="Stretch">
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
+                        <Border BorderBrush="#7B7B7B" BorderThickness="1" CornerRadius="5,5,0,0">
+                            <Label Content="STS"/>
+                        </Border>
+                        <Border BorderBrush="#7B7B7B" BorderThickness="1" CornerRadius="5,5,0,0">
+                            <Label Content="Dátum"/>
+                        </Border>
+                        <Border BorderBrush="#7B7B7B" BorderThickness="1" CornerRadius="5,5,0,0">
+                            <Label Content="Idő"/>
+                        </Border>
+                        <Border BorderBrush="#7B7B7B" BorderThickness="1" CornerRadius="5,5,0,0">
+                            <Label Content="XLS KVT"/>
+                        </Border>
+                        <Border BorderBrush="#7B7B7B" BorderThickness="1" CornerRadius="5,5,0,0">
+                            <Label Content="XLS név"/>
+                        </Border>
+                        <Border BorderBrush="#7B7B7B" BorderThickness="1" CornerRadius="5,5,0,0">
+                            <Label Content="E-mail"/>
+                        </Border>
+                                
+                    </StackPanel>
+                </ListBoxItem>
+            </ListBox>
+            -->
+        </Grid>
+        
     </Grid>
 </Window>
