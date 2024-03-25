@@ -7,6 +7,7 @@
         xmlns:local1="clr-namespace:RunSqlNew.ViewModels"
         mc:Ignorable="d"
         Title="RunSqlNew" Height="450" Width="800">
+    <!--NOTE: JOBB LENNE TALÁN FIX ABLAK MÉRET???-->
     <Window.Resources>
         <Style x:Key="ButtonStyle" TargetType="Button">
             <Setter Property="VerticalAlignment" Value="Stretch"/>
@@ -111,62 +112,50 @@
             -->
         </Grid>
         <!--Grid 2:-->
-        <Grid Name="Edits" Grid.Row="1">
+        <Grid Name="Edits" Grid.Row="1" HorizontalAlignment="Left">
             <Grid.RowDefinitions>
-                <RowDefinition Height="1*"/>
-                <RowDefinition Height="1*"/>
-                <RowDefinition Height="1*"/>
-                <RowDefinition Height="1*"/>
-                <RowDefinition Height="1*"/>
-                <RowDefinition Height="1*"/>
-                <RowDefinition Height="1*"/>
-                <RowDefinition Height="1*"/>
+                <RowDefinition Height="1*" SharedSizeGroup="Edits"/>
+                <RowDefinition Height="1*" SharedSizeGroup="Edits"/>
+                <RowDefinition Height="1*" SharedSizeGroup="Edits"/>
+                <RowDefinition Height="1*" SharedSizeGroup="Edits"/>
+                <RowDefinition Height="1*" SharedSizeGroup="Edits"/>
+                <RowDefinition Height="1*" SharedSizeGroup="Edits"/>
+                <RowDefinition Height="1*" SharedSizeGroup="Edits"/>
+                <RowDefinition Height="1*" SharedSizeGroup="Edits"/>
             </Grid.RowDefinitions>
             <!--Grid 2.2-->
-            <Grid Grid.Row="1">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="1*"/>
-                    <ColumnDefinition Width="1*"/>
-                    <ColumnDefinition Width="1*"/>
-                    <ColumnDefinition Width="1*"/>
-                    <ColumnDefinition Width="1*"/>
-                    <ColumnDefinition Width="5*"/>
-                </Grid.ColumnDefinitions>
-                <Viewbox HorizontalAlignment="Right" Grid.Column="0">
-                    <Label  Content="Dátum:" FontSize="15" FontWeight="Medium" HorizontalAlignment="Right"/>
-                </Viewbox>
-                <Viewbox Grid.Column="1" Margin="3,3,3,3" HorizontalAlignment="Left">
-                    <Border Style="{StaticResource TextBoxBorderStyle}">
+            <Viewbox Grid.Row="1">
+                <Grid Name="Date_Time_Riports">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="5*"/>
+                    </Grid.ColumnDefinitions>
+                    <Label Content="Dátum:" Grid.Column="0" FontSize="15" FontWeight="Medium" HorizontalAlignment="Right" Margin="0,0,0,0"/>
+                    <Border Style="{StaticResource TextBoxBorderStyle}" Grid.Column="1" Margin="3,3,3,3" HorizontalAlignment="Left">
                         <TextBox Name="textbox_Date" Style="{StaticResource TextBoxStyle}"/>
                     </Border>
-                </Viewbox>
-                <Viewbox HorizontalAlignment="Right" Grid.Column="2">
-                    <Label  Content="Idő:" FontSize="15" FontWeight="DemiBold" HorizontalAlignment="Right"/>
-                </Viewbox>
-                <Viewbox Grid.Column="3" Margin="3,3,3,3" HorizontalAlignment="Left">
-                    <Border Style="{StaticResource TextBoxBorderStyle}">
+                    <Label Content="Idő:" Grid.Column="2" FontSize="15" FontWeight="DemiBold" HorizontalAlignment="Right"/>
+                    <Border Style="{StaticResource TextBoxBorderStyle}" Grid.Column="3" Margin="3,3,3,3" HorizontalAlignment="Left">
                         <TextBox Name="textbox_Time" Style="{StaticResource TextBoxStyle}"/>
                     </Border>
-                </Viewbox>
-
-                <Viewbox Grid.Column="4" Margin="3,3,3,3">
-                    <Border Style="{StaticResource ButtonBorderStyle}">
+                    <Border Style="{StaticResource ButtonBorderStyle}" Grid.Column="4" Margin="3,3,3,3">
                         <Button Content="Most" Style="{StaticResource ButtonStyle}"/>
                     </Border>
-                </Viewbox>
-
-                <Viewbox Grid.Column="5" HorizontalAlignment="Left" Margin="20,0,0,0">
-                    <StackPanel Orientation="Horizontal">
+                    <StackPanel Orientation="Horizontal" Grid.Column="5" HorizontalAlignment="Left" Margin="20,0,0,0">
                         <RadioButton GroupName="RiportFrequency" Margin="5,0" FontSize="14" VerticalContentAlignment="Center">Havi Riport</RadioButton>
                         <RadioButton GroupName="RiportFrequency" Margin="5,0" FontSize="14" VerticalContentAlignment="Center">Heti Riport</RadioButton>
                         <RadioButton GroupName="RiportFrequency" Margin="5,0" FontSize="14" VerticalContentAlignment="Center">Napi Riport</RadioButton>
                         <RadioButton GroupName="RiportFrequency" Margin="5,0" FontSize="14" VerticalContentAlignment="Center">Egyszer fut</RadioButton>
                     </StackPanel>
-                </Viewbox>
-            </Grid>
+                </Grid>
+            </Viewbox>
             <!--Grid 2.3-->
             <Viewbox Grid.Row="2" HorizontalAlignment="Left">
-                <Grid Margin="14,0,0,0">
+                <Grid Name="Daily_Riport_Set" Margin="0,0,0,0">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="2*"/>
                         <ColumnDefinition Width="2*"/>
@@ -179,14 +168,14 @@
                         <ColumnDefinition Width="1*"/>
                     </Grid.ColumnDefinitions>
                     <Label Content="Napi Riport:" Grid.Column="0" FontSize="15" FontWeight="Medium" HorizontalContentAlignment="Left"/>
-                    <CheckBox Content="Munkanapon" Grid.Column="1" FontSize="13" Margin="5,0" VerticalContentAlignment="Center"/>
-                    <CheckBox Content="H" Grid.Column="2" FontSize="13" Margin="10,0" VerticalContentAlignment="Center"/>
-                    <CheckBox Content="K" Grid.Column="3" FontSize="13" Margin="10,0" VerticalContentAlignment="Center"/>
-                    <CheckBox Content="Sze" Grid.Column="4" FontSize="13" Margin="5,0" VerticalContentAlignment="Center"/>
-                    <CheckBox Content="Cs" Grid.Column="5" FontSize="13" Margin="7,0" VerticalContentAlignment="Center"/>
-                    <CheckBox Content="P" Grid.Column="6" FontSize="13" Margin="10,0" VerticalContentAlignment="Center"/>
-                    <CheckBox Content="Szo" Grid.Column="7" FontSize="13" Margin="4,0" VerticalContentAlignment="Center"/>
-                    <CheckBox Content="V" Grid.Column="8" FontSize="13" Margin="10,0" VerticalContentAlignment="Center"/>
+                    <CheckBox Content="Munkanapon" Grid.Column="1" FontSize="13" Margin="5,0" VerticalContentAlignment="Center" BorderBrush="#00B3CA"/>
+                    <CheckBox Content="H" Grid.Column="2" FontSize="13" Margin="10,0" VerticalContentAlignment="Center" BorderBrush="#00B3CA"/>
+                    <CheckBox Content="K" Grid.Column="3" FontSize="13" Margin="10,0" VerticalContentAlignment="Center" BorderBrush="#00B3CA"/>
+                    <CheckBox Content="Sze" Grid.Column="4" FontSize="13" Margin="5,0" VerticalContentAlignment="Center" BorderBrush="#00B3CA"/>
+                    <CheckBox Content="Cs" Grid.Column="5" FontSize="13" Margin="7,0" VerticalContentAlignment="Center" BorderBrush="#00B3CA"/>
+                    <CheckBox Content="P" Grid.Column="6" FontSize="13" Margin="10,0" VerticalContentAlignment="Center" BorderBrush="#00B3CA"/>
+                    <CheckBox Content="Szo" Grid.Column="7" FontSize="13" Margin="4,0" VerticalContentAlignment="Center" BorderBrush="#00B3CA"/>
+                    <CheckBox Content="V" Grid.Column="8" FontSize="13" Margin="10,0" VerticalContentAlignment="Center" BorderBrush="#00B3CA"/>
                 </Grid>
             </Viewbox>
         </Grid>
