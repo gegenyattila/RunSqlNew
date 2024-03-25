@@ -6,7 +6,53 @@
         xmlns:local="clr-namespace:RunSqlNew"
         xmlns:local1="clr-namespace:RunSqlNew.ViewModels"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="RunSqlNew" Height="450" Width="800">
+    <Window.Resources>
+        <Style x:Key="ButtonStyle" TargetType="Button">
+            <Setter Property="VerticalAlignment" Value="Stretch"/>
+            <Setter Property="VerticalContentAlignment" Value="Top"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Height" Value="21"/>
+            <Setter Property="Margin" Value="-4,-1,-4,-1"/>
+            <Setter Property="Background">
+                <Setter.Value>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                        <GradientStop Color="#FFC0DEF1" Offset="0"/>
+                        <GradientStop Color="#FFC0DEFF" Offset="0.445"/>
+                        <GradientStop Color="#00B3CA" Offset="0.53"/>
+                    </LinearGradientBrush>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="ButtonBorderStyle" TargetType="Border">
+            <Setter Property="BorderThickness" Value="5"/>
+            <Setter Property="CornerRadius" Value="5"/>
+            <Setter Property="Width" Value="80"/>
+            <Setter Property="Height" Value="21"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="BorderBrush">
+                <Setter.Value>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                        <GradientStop Color="#FFC0DEF1" Offset="0"/>
+                        <GradientStop Color="#FFC0DEFF" Offset="0.44"/>
+                        <GradientStop Color="#00B3CA" Offset="0.53"/>
+                    </LinearGradientBrush>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="TextBoxBorderStyle" TargetType="Border">
+            <Setter Property="CornerRadius" Value="5"/>
+            <Setter Property="BorderBrush" Value="#00B3CA"/>
+            <Setter Property="BorderThickness" Value="2"/>
+        </Style>
+        <Style x:Key="TextBoxStyle" TargetType="TextBox">
+            <Setter Property="BorderBrush" Value="#00B3CA"/>
+            <Setter Property="BorderThickness" Value="2"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Width" Value="65"/>
+        </Style>
+    </Window.Resources>
     <Window.DataContext>
         <local1:MainWindowViewModel/>
     </Window.DataContext>
@@ -16,14 +62,14 @@
             <RowDefinition Height="4*"/>
             <RowDefinition Height="6*"/>
         </Grid.RowDefinitions>
-        <Grid Grid.Row="0" Name="Values" HorizontalAlignment="Stretch" AllowDrop="False">
+        <!--Grid 1:-->
+        <Grid Grid.Row="0" Name="Values" HorizontalAlignment="Stretch">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-
+            <!--Grid 1.1-->
             <DataGrid ItemsSource="{Binding Datas}" Background="#7B7B7B" AllowDrop="False" 
-                      ScrollViewer.CanContentScroll="True" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Auto"
-                      >
+                      ScrollViewer.CanContentScroll="True" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Auto">
                 <DataGrid.CellStyle>
                     <Style TargetType="DataGridCell">
                         <Style.Triggers>
@@ -64,6 +110,101 @@
             </ListBox>
             -->
         </Grid>
-        
+        <!--Grid 2:-->
+        <Grid Name="Edits" Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="1*"/>
+            </Grid.RowDefinitions>
+            <!--Grid 2.2-->
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="5*"/>
+                </Grid.ColumnDefinitions>
+                <Viewbox HorizontalAlignment="Right" Grid.Column="0">
+                    <Label  Content="Dátum:" FontSize="15" FontWeight="Medium" HorizontalAlignment="Right"/>
+                </Viewbox>
+                <Viewbox Grid.Column="1" Margin="3,3,3,3" HorizontalAlignment="Left">
+                    <Border Style="{StaticResource TextBoxBorderStyle}">
+                        <TextBox Name="textbox_Date" Style="{StaticResource TextBoxStyle}"/>
+                    </Border>
+                </Viewbox>
+                <Viewbox HorizontalAlignment="Right" Grid.Column="2">
+                    <Label  Content="Idő:" FontSize="15" FontWeight="DemiBold" HorizontalAlignment="Right"/>
+                </Viewbox>
+                <Viewbox Grid.Column="3" Margin="3,3,3,3" HorizontalAlignment="Left">
+                    <Border Style="{StaticResource TextBoxBorderStyle}">
+                        <TextBox Name="textbox_Time" Style="{StaticResource TextBoxStyle}"/>
+                    </Border>
+                </Viewbox>
+
+                <Viewbox Grid.Column="4" Margin="3,3,3,3">
+                    <Border Style="{StaticResource ButtonBorderStyle}">
+                        <Button Content="Most" Style="{StaticResource ButtonStyle}"/>
+                    </Border>
+                </Viewbox>
+
+                <Viewbox Grid.Column="5" HorizontalAlignment="Left" Margin="20,0,0,0">
+                    <StackPanel Orientation="Horizontal">
+                        <RadioButton GroupName="RiportFrequency" Margin="5,0" FontSize="14" VerticalContentAlignment="Center">Havi Riport</RadioButton>
+                        <RadioButton GroupName="RiportFrequency" Margin="5,0" FontSize="14" VerticalContentAlignment="Center">Heti Riport</RadioButton>
+                        <RadioButton GroupName="RiportFrequency" Margin="5,0" FontSize="14" VerticalContentAlignment="Center">Napi Riport</RadioButton>
+                        <RadioButton GroupName="RiportFrequency" Margin="5,0" FontSize="14" VerticalContentAlignment="Center">Egyszer fut</RadioButton>
+                    </StackPanel>
+                </Viewbox>
+            </Grid>
+            <!--Grid 2.3-->
+            <Grid Grid.Row="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="1*"/>
+                </Grid.ColumnDefinitions>
+                <Viewbox Grid.Column="0">
+                    <Label  Content="Napi Riport:" FontSize="15" FontWeight="Medium"/>
+                </Viewbox >
+                <Viewbox Grid.Column="1">
+                        <CheckBox Content="Munkanapon" FontSize="13" Margin="5,0" VerticalContentAlignment="Center"/>
+                </Viewbox>
+                <Viewbox Grid.Column="2">
+                    <CheckBox Content="H" FontSize="13" Margin="10,0" VerticalContentAlignment="Center"/>
+                </Viewbox>
+                <Viewbox Grid.Column="3">
+                    <CheckBox Content="K" FontSize="13" Margin="10,0" VerticalContentAlignment="Center"/>
+                </Viewbox>
+                <Viewbox Grid.Column="4">
+                    <CheckBox Content="Sze" FontSize="13" Margin="5,0" VerticalContentAlignment="Center"/>
+                </Viewbox>
+                <Viewbox Grid.Column="5">
+                    <CheckBox Content="Cs" FontSize="13" Margin="7,0" VerticalContentAlignment="Center"/>
+                </Viewbox>
+                <Viewbox Grid.Column="6">
+                    <CheckBox Content="P" FontSize="13" Margin="10,0" VerticalContentAlignment="Center"/>
+                </Viewbox>
+                <Viewbox Grid.Column="7">
+                    <CheckBox Content="Szo" FontSize="13" Margin="4,0" VerticalContentAlignment="Center"/>
+                </Viewbox>
+                <Viewbox Grid.Column="8">
+                    <CheckBox Content="V" FontSize="13" Margin="10,0" VerticalContentAlignment="Center"/>
+                </Viewbox>
+            </Grid>
+        </Grid>
     </Grid>
 </Window>
