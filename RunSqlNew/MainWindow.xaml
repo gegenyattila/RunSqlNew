@@ -53,6 +53,11 @@
             <Setter Property="FontSize" Value="14"/>
             <!--<Setter Property="Width" Value="65"/>-->
         </Style>
+        <Style x:Key="CheckBoxStyle_napiriport" TargetType="CheckBox">
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="BorderBrush" Value="#00B3CA"/>
+        </Style>
     </Window.Resources>
     <Window.DataContext>
         <local1:MainWindowViewModel/>
@@ -134,13 +139,12 @@
                         <ColumnDefinition Width="1*"/>
                         <ColumnDefinition Width="5*"/>
                     </Grid.ColumnDefinitions>
-                    <Label Content="Dátum:" Grid.Column="0" FontSize="15" FontWeight="Medium" HorizontalAlignment="Left" Margin="0,0,0,0"/>
-                    <Border Style="{StaticResource TextBoxBorderStyle}" Grid.Column="1" HorizontalAlignment="Stretch">
+                    <Label Content="Dátum:" Grid.Column="0" FontSize="15" FontWeight="Medium" HorizontalAlignment="Left"/>
+                    <Border Style="{StaticResource TextBoxBorderStyle}" Grid.Column="1" HorizontalAlignment="Left">
                         <TextBox Name="textbox_Date" Style="{StaticResource TextBoxStyle}" Width="65"/>
                     </Border>
-                    <Label Content="Idő:" Grid.Column="2" FontSize="15" FontWeight="DemiBold" HorizontalAlignment="Right"/>
+                    <Label Content="Idő:" Grid.Column="2" FontSize="15" FontWeight="DemiBold" Margin="27,0,0,0"/>
                     <Border Style="{StaticResource TextBoxBorderStyle}" Grid.Column="3" HorizontalAlignment="Stretch">
-                        <!--Margin="3,3,3,3"-->
                         <TextBox Name="textbox_Time" Style="{StaticResource TextBoxStyle}" Width="65" HorizontalAlignment="Right"/>
                     </Border>
                     <Border Style="{StaticResource ButtonBorderStyle}" Grid.Column="4" HorizontalAlignment="Right">
@@ -169,14 +173,14 @@
                         <ColumnDefinition Width="1*"/>
                     </Grid.ColumnDefinitions>
                     <Label Content="Napi Riport:" Grid.Column="0" FontSize="15" FontWeight="Medium" HorizontalContentAlignment="Left"/>
-                    <CheckBox Content="Munkanapon" Grid.Column="1" FontSize="13" Margin="5,0" VerticalContentAlignment="Center" BorderBrush="#00B3CA"/>
-                    <CheckBox Content="H" Grid.Column="2" FontSize="13" Margin="10,0" VerticalContentAlignment="Center" BorderBrush="#00B3CA"/>
-                    <CheckBox Content="K" Grid.Column="3" FontSize="13" Margin="10,0" VerticalContentAlignment="Center" BorderBrush="#00B3CA"/>
-                    <CheckBox Content="Sze" Grid.Column="4" FontSize="13" Margin="5,0" VerticalContentAlignment="Center" BorderBrush="#00B3CA"/>
-                    <CheckBox Content="Cs" Grid.Column="5" FontSize="13" Margin="7,0" VerticalContentAlignment="Center" BorderBrush="#00B3CA"/>
-                    <CheckBox Content="P" Grid.Column="6" FontSize="13" Margin="10,0" VerticalContentAlignment="Center" BorderBrush="#00B3CA"/>
-                    <CheckBox Content="Szo" Grid.Column="7" FontSize="13" Margin="4,0" VerticalContentAlignment="Center" BorderBrush="#00B3CA"/>
-                    <CheckBox Content="V" Grid.Column="8" FontSize="13" Margin="10,0" VerticalContentAlignment="Center" BorderBrush="#00B3CA"/>
+                    <CheckBox Content="Munkanapon" Name="CB_M" Grid.Column="1" Margin="5,0" Style="{StaticResource CheckBoxStyle_napiriport}"/>
+                    <CheckBox Content="H" Name="CB_H" Grid.Column="2" Margin="10,0" Style="{StaticResource CheckBoxStyle_napiriport}"/>
+                    <CheckBox Content="K" Name="CB_K" Grid.Column="3" Margin="10,0" Style="{StaticResource CheckBoxStyle_napiriport}"/>
+                    <CheckBox Content="Sze" Name="CB_SZE" Grid.Column="4" Margin="5,0" Style="{StaticResource CheckBoxStyle_napiriport}"/>
+                    <CheckBox Content="Cs" Name="CB_CS" Grid.Column="5" Margin="7,0" Style="{StaticResource CheckBoxStyle_napiriport}"/>
+                    <CheckBox Content="P" Name="CB_P" Grid.Column="6" Margin="10,0" Style="{StaticResource CheckBoxStyle_napiriport}"/>
+                    <CheckBox Content="Szo" Name="CB_SZO" Grid.Column="7" Margin="4,0" Style="{StaticResource CheckBoxStyle_napiriport}"/>
+                    <CheckBox Content="V" Name="CB_V" Grid.Column="8" Margin="10,0" Style="{StaticResource CheckBoxStyle_napiriport}"/>
                 </Grid>
             </Viewbox>
             <!--Grid 2.4-->
@@ -193,6 +197,88 @@
                     </Border>
                     <Border Style="{StaticResource ButtonBorderStyle}" Grid.Column="2" HorizontalAlignment="Right">
                         <Button Name="button_Riport" Content="Riport" Style="{StaticResource ButtonStyle}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"/>
+                    </Border>
+                </Grid>
+            </Viewbox>
+            <!--Grid 2.5-->
+            <Viewbox Grid.Row="4" HorizontalAlignment="Left">
+                <Grid Name="XLSKVT_Input" Width="680" HorizontalAlignment="Stretch">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="8*"/>
+                        <ColumnDefinition Width="1*"/>
+                    </Grid.ColumnDefinitions>
+                    <Label Grid.Column="0"  Content="XLS Kvt:" FontSize="15" FontWeight="Medium"/>
+                    <Border Style="{StaticResource TextBoxBorderStyle}" Grid.Column="1" HorizontalAlignment="Stretch">
+                        <TextBox Name="textbox_XLSKVT" Style="{StaticResource TextBoxStyle}" HorizontalAlignment="Stretch"/>
+                    </Border>
+                    <Border Style="{StaticResource ButtonBorderStyle}" Grid.Column="2" HorizontalAlignment="Right">
+                        <Button Name="button_XLSKVT" Content="XLS Kvt" Style="{StaticResource ButtonStyle}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"/>
+                    </Border>
+                </Grid>
+            </Viewbox>
+            <!--Grid 2.6-->
+            <Viewbox Grid.Row="5" HorizontalAlignment="Left">
+                <Grid Name="XLSnev_Input" Width="680" HorizontalAlignment="Stretch">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="8*"/>
+                        <ColumnDefinition Width="1*"/>
+                    </Grid.ColumnDefinitions>
+                    <Label Grid.Column="0"  Content="KLS Név:" FontSize="15" FontWeight="Medium"/>
+                    <Border Style="{StaticResource TextBoxBorderStyle}" Grid.Column="1">
+                        <TextBox Name="textbox_XLSnev" Style="{StaticResource TextBoxStyle}" HorizontalAlignment="Stretch"/>
+                    </Border>
+                    <CheckBox Content="Dátum Jelző" Name="CB_DatumJelzo" Grid.Column="2" Margin="3,0,-30,0" VerticalContentAlignment="Center" BorderBrush="#00B3CA"/>
+                </Grid>
+            </Viewbox>
+            <!--Grid 2.7-->
+            <Viewbox Grid.Row="6" HorizontalAlignment="Left">
+                <Grid Name="Email_Input" Width="680" HorizontalAlignment="Stretch">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="9*"/>
+                    </Grid.ColumnDefinitions>
+                    <Label Grid.Column="0"  Content="Email:" FontSize="15" FontWeight="Medium"/>
+                    <Border Style="{StaticResource TextBoxBorderStyle}" Grid.Column="1">
+                        <TextBox Name="textbox_Email" Style="{StaticResource TextBoxStyle}" HorizontalAlignment="Stretch"/>
+                    </Border>
+                </Grid>
+            </Viewbox>
+            <!--Grid 2.8-->
+            <Viewbox Grid.Row="7" HorizontalAlignment="Left">
+                <Grid Name="BottomButtons_Input" HorizontalAlignment="Left">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="1*"/>
+                    </Grid.ColumnDefinitions>
+                    <CheckBox Content="Engedélyezve" Name="CB_engedelyezve" Grid.Column="0" Margin="3,0,-30,0" HorizontalAlignment="Left" VerticalContentAlignment="Center" BorderBrush="#00B3CA"/>
+                    <Label Name="label_RiportNr" Content="Riport Nr: " Grid.Column="2"/>
+                    <Label Grid.Column="1" Visibility="Hidden" Content="...................."/>
+                    <Label Grid.Column="3"/>
+                    <Label Grid.Column="4" Visibility="Hidden" Content="........."/>
+                    <Border Style="{StaticResource ButtonBorderStyle}" Grid.Column="5" HorizontalAlignment="Right">
+                        <Button Name="button_Szerkeszt" Content="Szerkeszt" Style="{StaticResource ButtonStyle}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"/>
+                    </Border>
+                    <Border Style="{StaticResource ButtonBorderStyle}" Grid.Column="6" HorizontalAlignment="Right">
+                        <Button Name="button_Hozzaad" Content="Hozzáad" Style="{StaticResource ButtonStyle}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"/>
+                    </Border>
+                    <Border Style="{StaticResource ButtonBorderStyle}" Grid.Column="7" HorizontalAlignment="Right">
+                        <Button Name="button_Torol" Content="Töröl" Style="{StaticResource ButtonStyle}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"/>
+                    </Border>
+                    <Border Style="{StaticResource ButtonBorderStyle}" Grid.Column="8" HorizontalAlignment="Right">
+                        <Button Name="button_Megsem" Content="Mégsem" Style="{StaticResource ButtonStyle}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"/>
+                    </Border>
+                    <Border Style="{StaticResource ButtonBorderStyle}" Grid.Column="9" HorizontalAlignment="Right">
+                        <Button Name="button_Mentes" Content="Mentés" Style="{StaticResource ButtonStyle}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"/>
                     </Border>
                 </Grid>
             </Viewbox>
