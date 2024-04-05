@@ -24,5 +24,10 @@ namespace RunSqlNew
         {
             InitializeComponent();
         }
+
+        private void DataGrid_Selected(object sender, RoutedEventArgs e)
+        {
+            textbox_Date.Text = DatasInWindow.SelectedCells[0].Item.ToString();
+        }
     }
 }

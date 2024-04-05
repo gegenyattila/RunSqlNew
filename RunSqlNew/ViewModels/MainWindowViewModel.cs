@@ -33,7 +33,12 @@ namespace RunSqlNew.ViewModels
             Excel._Worksheet xlwoorksheet = xlWorkbook.Sheets[1];
             Excel.Range xlRange = xlwoorksheet.UsedRange;
 
-            for (int i = 1; i <= 5; i++)
+            Datas = new ObservableCollection<ExcelDatas>();
+
+            int rowCount = xlRange.Rows.Count;
+            int colCount = xlRange.Columns.Count;
+
+            for (int i = 1; i <= rowCount; i++)
             {
                 string datum = "";
                 string ido = "";
@@ -46,9 +51,8 @@ namespace RunSqlNew.ViewModels
                 string m_nap = "";
                 string eng = "";
 
-                Datas = new ObservableCollection<ExcelDatas>();
 
-                for (int j = 1; j <= 5; j++)
+                for (int j = 1; j <= colCount; j++)
                 {
                     //new line
                     if (j == 1)
@@ -61,15 +65,15 @@ namespace RunSqlNew.ViewModels
                         {
                             case 1:
                                 {
-                                    DateTime test = DateTime.FromOADate(xlRange.Cells[i, j].Value2);//.ToString();
-                                    datum = test.ToShortDateString();
+                                    DateTime date = DateTime.FromOADate(xlRange.Cells[i, j].Value2);//.ToString();
+                                    datum = date.ToShortDateString();
                                     break;
                                 }
                             case 2:
                                 {
-                                    DateTime test = DateTime.FromOADate(xlRange.Cells[i, j].Value2);//.ToString();
-                                    ido = test.Hour.ToString() +":"+ test.Minute.ToString();
-                                    if(test.Minute.ToString() == "0")
+                                    DateTime date = DateTime.FromOADate(xlRange.Cells[i, j].Value2);//.ToString();
+                                    ido = date.Hour.ToString() +":"+ date.Minute.ToString();
+                                    if(date.Minute.ToString() == "0")
                                     {
                                         ido += "0";
                                     }
@@ -118,21 +122,10 @@ namespace RunSqlNew.ViewModels
                             default:
                                 break;
                         }
-                        Datas.Add(new ExcelDatas(datum, ido, riport, xls_kvt, xls_nev, cimek, h_h_n_e, df, m_nap, eng));
-                    }
-                    //string test = xlRange.Cells[i, j].Value2.ToString() + "\t";
-
-                    //add useful things here!   
+                    }  
                 }
+                Datas.Add(new ExcelDatas(datum, ido, riport, xls_kvt, xls_nev, cimek, h_h_n_e, df, m_nap, eng));
             }
-
-            
-
-            //Datas.Add(new ExcelDatas());
-            //Datas.Add(new ExcelDatas());
-            //Datas.Add(new ExcelDatas());
-
-
         }
     }
 }

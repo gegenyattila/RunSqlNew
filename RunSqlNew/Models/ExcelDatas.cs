@@ -91,7 +91,24 @@ namespace RunSqlNew.Models
             eng = defualt;
         }
 
-        public ExcelDatas(string datum, string ido, string riport, string xls_kvt, string xls_nev, 
+        public ExcelDatas(string datum = "nincs adat", string ido = "nincs adat", string riport = "nincs adat", 
+            string xls_kvt = "nincs adat", string xls_nev = "nincs adat", string cimek = "nincs adat", 
+            string h_h_n_e = "nincs adat", string df = "nincs adat", string m_nap = "nincs adat", string eng = "nincs adat")
+        {
+            this.datum = datum;
+            this.ido = ido;
+            this.riport = riport;
+            this.xls_kvt = xls_kvt;
+            this.xls_nev = xls_nev;
+            this.cimek = cimek;
+            this.h_h_n_e = h_h_n_e;
+            this.df = df;
+            this.m_nap = m_nap;
+            this.eng = eng;
+        }
+
+        /*
+        public ExcelDatas(string datum, string ido, string riport, string xls_kvt, string xls_nev,
             string cimek, string h_h_n_e, string df, string m_nap, string eng)
         {
             this.datum = datum;
@@ -105,5 +122,6 @@ namespace RunSqlNew.Models
             this.m_nap = m_nap;
             this.eng = eng;
         }
+        */
     }
 }
