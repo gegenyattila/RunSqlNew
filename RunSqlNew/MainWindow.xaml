@@ -147,8 +147,9 @@
                     </Grid.ColumnDefinitions>
                     <Label Content="Dátum:" Grid.Column="0" FontSize="15" FontWeight="Medium" HorizontalAlignment="Left"/>
                     <Border Style="{StaticResource TextBoxBorderStyle}" Grid.Column="1" HorizontalAlignment="Left">
-                        <TextBox Name="textbox_Date" Style="{StaticResource TextBoxStyle}" Width="65" 
-                                 Text="{Binding local1}"/>
+                        <TextBox Name="textbox_Date" Style="{StaticResource TextBoxStyle}" Width="65">
+                            <!--Somehow set the text property to be equal to the correct cell in the selected row in order-->
+                        </TextBox>
                     </Border>
                     <Label Content="Idő:" Grid.Column="2" FontSize="15" FontWeight="DemiBold" Margin="27,0,0,0"/>
                     <Border Style="{StaticResource TextBoxBorderStyle}" Grid.Column="3" HorizontalAlignment="Stretch">

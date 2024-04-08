@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using RunSqlNew.ViewModels;
 
 namespace RunSqlNew
 {
@@ -27,6 +28,7 @@ namespace RunSqlNew
 
         private void DataGrid_Selected(object sender, RoutedEventArgs e)
         {
+            //CurrentlySelected
             textbox_Date.Text = DatasInWindow.SelectedCells[0].Item.ToString();
         }
     }

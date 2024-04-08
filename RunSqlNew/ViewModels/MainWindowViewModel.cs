@@ -27,6 +27,7 @@ namespace RunSqlNew.ViewModels
     //string eng;
     public class MainWindowViewModel : ObservableRecipient
     {
+        public ExcelDatas CurrentlySelected;
         public ObservableCollection<ExcelDatas> Datas { get; set; }
 
         public MainWindowViewModel()
@@ -62,6 +63,10 @@ namespace RunSqlNew.ViewModels
                     string? m_nap = "";
                     string? eng = "";
 
+                    if (i == 1)
+                    {
+                        CurrentlySelected = new ExcelDatas(datum, ido, riport, xls_kvt, xls_nev, cimek, h_h_n_e, df, m_nap, eng);
+                    }
 
                     for (int j = 1; j <= colCount; j++)
                     {

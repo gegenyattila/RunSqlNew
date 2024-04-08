@@ -91,8 +91,8 @@ namespace RunSqlNew.Models
             eng = defualt;
         }
 
-        public ExcelDatas(string datum = "nincs adat", string ido = "nincs adat", string riport = "nincs adat", 
-            string xls_kvt = "nincs adat", string xls_nev = "nincs adat", string cimek = "nincs adat", 
+        public ExcelDatas(string datum = "nincs adat", string ido = "nincs adat", string riport = "nincs adat",
+            string xls_kvt = "nincs adat", string xls_nev = "nincs adat", string cimek = "nincs adat",
             string h_h_n_e = "nincs adat", string df = "nincs adat", string m_nap = "nincs adat", string eng = "nincs adat")
         {
             this.datum = datum;
