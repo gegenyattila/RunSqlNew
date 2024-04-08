@@ -12,6 +12,7 @@ using Excel = Microsoft.Office.Interop.Excel;
 using OfficeOpenXml;
 using System.IO;
 using Microsoft.Office.Interop.Excel;
+using Logic;
 
 namespace RunSqlNew.ViewModels
 {
@@ -27,7 +28,8 @@ namespace RunSqlNew.ViewModels
     //string eng;
     public class MainWindowViewModel : ObservableRecipient
     {
-        public ExcelDatas CurrentlySelected;
+        //public ExcelDatas CurrentlySelected;
+        public IRunSqlLogic Logic;
         public ObservableCollection<ExcelDatas> Datas { get; set; }
 
         public MainWindowViewModel()
@@ -37,11 +39,19 @@ namespace RunSqlNew.ViewModels
             //Excel._Worksheet xlwoorksheet = xlWorkbook.Sheets[1];
             //Excel.Range xlRange = xlwoorksheet.UsedRange;
 
-            FileInfo file = new FileInfo("C:\\Users\\GégényAttilaGábor\\Documents\\runsqltest.xlsx");
-            ExcelPackage.LicenseContext = LicenseContext.Commercial;
+            //FileInfo file = new FileInfo("C:\\Users\\GégényAttilaGábor\\Documents\\runsqltest.xlsx");
+            //ExcelPackage.LicenseContext = LicenseContext.Commercial;
+
+            //Logic.RunSqlLogic.ReferenceEquals(this, file);
 
             Datas = new ObservableCollection<ExcelDatas>();
 
+            ObservableCollection<ExcelDatas> temp = Datas;
+
+            Logic = new RunSqlLogic(ref temp);
+
+            Datas = temp;
+            /*
             using (var package = new ExcelPackage(file))
             {
                 ExcelWorkbook workbook = package.Workbook;
@@ -143,12 +153,13 @@ namespace RunSqlNew.ViewModels
                     Datas.Add(new ExcelDatas(datum, ido, riport, xls_kvt, xls_nev, cimek, h_h_n_e, df, m_nap, eng));
                 }
             }
+            */
 
 
             //int rowCount = xlRange.Rows.Count;
             //int colCount = xlRange.Columns.Count;
 
-            
+
         }
     }
 }

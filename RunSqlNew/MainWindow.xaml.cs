@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Logic;
 using RunSqlNew.ViewModels;
 
 namespace RunSqlNew
@@ -21,15 +22,23 @@ namespace RunSqlNew
     /// </summary>
     public partial class MainWindow : Window
     {
+        IRunSqlLogic Logic;
         public MainWindow()
         {
             InitializeComponent();
         }
 
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            //Logic = new RunSqlLogic();
+        }
+
         private void DataGrid_Selected(object sender, RoutedEventArgs e)
         {
-            //CurrentlySelected
-            textbox_Date.Text = DatasInWindow.SelectedCells[0].Item.ToString();
+            int selectedInex = DatasInWindow.SelectedIndex;
+
+            //ViewModel.CurrentlySelected
+            //textbox_Date.Text = DatasInWindow.SelectedIndex.ToString();
         }
     }
 }

@@ -7,7 +7,8 @@
         xmlns:local1="clr-namespace:RunSqlNew.ViewModels"
         xmlns:xcdg="http://schemas.xceed.com/wpf/xaml/datagrid" 
         mc:Ignorable="d"
-        Title="RunSqlNew" Height="450" Width="800">
+        Title="RunSqlNew" Height="450" Width="800"
+        Loaded="Window_Loaded">
     <!--NOTE: JOBB LENNE TALÁN FIX ABLAK MÉRET???-->
     <Window.Resources>
         <Style x:Key="ButtonStyle" TargetType="Button">
