@@ -12,14 +12,14 @@ namespace Logic
     public class RunSqlLogic : IRunSqlLogic
     {
         public ExcelDatas CurrentlySelected { get; set; }
-        //public ObservableCollection<ExcelDatas> Datas { get; set; }
+        public ObservableCollection<ExcelDatas> Datas { get; set; }
 
-        public RunSqlLogic(ref ObservableCollection<ExcelDatas> Datas)
+        public RunSqlLogic()
         {
             FileInfo file = new FileInfo("C:\\Users\\GégényAttilaGábor\\Documents\\runsqltest.xlsx");
             ExcelPackage.LicenseContext = LicenseContext.Commercial;
 
-            //Datas = new ObservableCollection<ExcelDatas>();
+            Datas = new ObservableCollection<ExcelDatas>();
 
             using (var package = new ExcelPackage(file))
             {
@@ -55,18 +55,12 @@ namespace Logic
                             {
                                 case 1:
                                     {
-                                        //DateTime date = DateTime.FromOADate(DateTime.Parse(worksheet.Cells[i, j].Value));
-                                        datum = worksheet.Cells[i, j].Value.ToString(); //= date.ToShortDateString();
+                                        datum = worksheet.Cells[i, j].Value.ToString();
                                         break;
                                     }
                                 case 2:
                                     {
-                                        //DateTime date = DateTime.FromOADate(worksheet.Cells[i, j].Value);//.ToString();
-                                        ido = worksheet.Cells[i, j].Value.ToString();//date.Hour.ToString() + ":" + date.Minute.ToString();
-                                        //if (date.Minute.ToString() == "0")
-                                        //{
-                                        //    ido += "0";
-                                        //}
+                                        ido = worksheet.Cells[i, j].Value.ToString();
                                         break;
                                     }
                                 case 3:
@@ -116,6 +110,55 @@ namespace Logic
                     }
                     Datas.Add(new ExcelDatas(datum, ido, riport, xls_kvt, xls_nev, cimek, h_h_n_e, df, m_nap, eng));
                 }
+            }
+        }
+
+        public string ReturnDatas(int rowIndex, int colIndex)
+        {
+            switch (colIndex)
+            {
+                case 1:
+                    {
+                        return Datas[rowIndex].Dátum;
+                    }
+                case 2:
+                    {
+                        return Datas[rowIndex].Idő;
+                    }
+                case 3:
+                    {
+                        return Datas[rowIndex].Riport;
+                    }
+                case 4:
+                    {
+                        return Datas[rowIndex].XLS_KVT;
+                    }
+                case 5:
+                    {
+                        return Datas[rowIndex].XLS_NÉV;
+                    }
+                case 6:
+                    {
+                        return Datas[rowIndex].Címek;
+                    }
+                case 7:
+                    {
+                        return Datas[rowIndex].H_H_N_E;
+                    }
+                case 8:
+                    {
+                        return Datas[rowIndex].DF;
+                    }
+                case 9:
+                    {
+                        return Datas[rowIndex].M_nap;
+                    }
+                case 10:
+                    {
+                        return Datas[rowIndex].Eng;
+                    }
+                default:
+                    return null;
             }
         }
     }

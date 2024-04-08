@@ -11,6 +11,7 @@ namespace Logic
     public interface IRunSqlLogic
     {
         public ExcelDatas CurrentlySelected { get; set; }
-        //public ObservableCollection<ExcelDatas> Datas { get; set; }
+        public string ReturnDatas(int rowIndex, int colIndex);
+        public ObservableCollection<ExcelDatas> Datas { get; set; }
     }
 }

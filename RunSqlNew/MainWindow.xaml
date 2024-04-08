@@ -61,14 +61,6 @@
             <Setter Property="BorderBrush" Value="#00B3CA"/>
         </Style>
     </Window.Resources>
-    <Window.DataContext>
-        <local1:MainWindowViewModel/>
-    </Window.DataContext>
-    
-   
-    
-
-    
 
     <Grid Background="#009EB3">
         <Grid.RowDefinitions>
@@ -81,7 +73,7 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <!--Grid 1.1-->
-            <DataGrid Name="DatasInWindow" ItemsSource="{Binding Datas}" Background="#7B7B7B" AllowDrop="False" SelectionChanged="DataGrid_Selected"
+            <DataGrid Name="DatasInWindow" ItemsSource="{Binding Datas, Mode=OneWay}" Background="#7B7B7B" AllowDrop="False" SelectionChanged="DataGrid_Selected"
                       ScrollViewer.CanContentScroll="True" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Auto">
                 <DataGrid.CellStyle>
                     <Style TargetType="DataGridCell">
@@ -160,10 +152,10 @@
                         <Button Name="button_Most" Content="Most" Style="{StaticResource ButtonStyle}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"/>
                     </Border>
                     <StackPanel Orientation="Horizontal" Grid.Column="5" Margin="20,0,-40,0">
-                        <RadioButton GroupName="RiportFrequency" Margin="5,0" FontSize="12" VerticalContentAlignment="Center">Havi Riport</RadioButton>
-                        <RadioButton GroupName="RiportFrequency" Margin="5,0" FontSize="12" VerticalContentAlignment="Center">Heti Riport</RadioButton>
-                        <RadioButton GroupName="RiportFrequency" Margin="5,0" FontSize="12" VerticalContentAlignment="Center">Napi Riport</RadioButton>
-                        <RadioButton GroupName="RiportFrequency" Margin="5,0" FontSize="12" VerticalContentAlignment="Center">Egyszer fut</RadioButton>
+                        <RadioButton Name ="rb_RepFreqHavi" GroupName="RiportFrequency" Margin="5,0" FontSize="12" VerticalContentAlignment="Center">Havi Riport</RadioButton>
+                        <RadioButton Name ="rb_RepFreqHeti" GroupName="RiportFrequency" Margin="5,0" FontSize="12" VerticalContentAlignment="Center">Heti Riport</RadioButton>
+                        <RadioButton Name ="rb_RepFreqNapi" GroupName="RiportFrequency" Margin="5,0" FontSize="12" VerticalContentAlignment="Center">Napi Riport</RadioButton>
+                        <RadioButton Name ="rb_RepFreqEgyszer" GroupName="RiportFrequency" Margin="5,0" FontSize="12" VerticalContentAlignment="Center">Egyszer fut</RadioButton>
                     </StackPanel>
                 </Grid>
             </Viewbox>
@@ -182,14 +174,14 @@
                         <ColumnDefinition Width="1*"/>
                     </Grid.ColumnDefinitions>
                     <Label Content="Napi Riport:" Grid.Column="0" FontSize="15" FontWeight="Medium" HorizontalContentAlignment="Left"/>
-                    <CheckBox Content="Munkanapon" Name="CB_M" Grid.Column="1" Margin="5,0" Style="{StaticResource CheckBoxStyle_napiriport}"/>
-                    <CheckBox Content="H" Name="CB_H" Grid.Column="2" Margin="10,0" Style="{StaticResource CheckBoxStyle_napiriport}"/>
-                    <CheckBox Content="K" Name="CB_K" Grid.Column="3" Margin="10,0" Style="{StaticResource CheckBoxStyle_napiriport}"/>
-                    <CheckBox Content="Sze" Name="CB_SZE" Grid.Column="4" Margin="5,0" Style="{StaticResource CheckBoxStyle_napiriport}"/>
-                    <CheckBox Content="Cs" Name="CB_CS" Grid.Column="5" Margin="7,0" Style="{StaticResource CheckBoxStyle_napiriport}"/>
-                    <CheckBox Content="P" Name="CB_P" Grid.Column="6" Margin="10,0" Style="{StaticResource CheckBoxStyle_napiriport}"/>
-                    <CheckBox Content="Szo" Name="CB_SZO" Grid.Column="7" Margin="4,0" Style="{StaticResource CheckBoxStyle_napiriport}"/>
-                    <CheckBox Content="V" Name="CB_V" Grid.Column="8" Margin="10,0" Style="{StaticResource CheckBoxStyle_napiriport}"/>
+                    <CheckBox Content="Munkanapon" Name="cb_M" Grid.Column="1" Margin="5,0" Style="{StaticResource CheckBoxStyle_napiriport}"/>
+                    <CheckBox Content="H" Name="cb_H" Grid.Column="2" Margin="10,0" Style="{StaticResource CheckBoxStyle_napiriport}"/>
+                    <CheckBox Content="K" Name="cb_K" Grid.Column="3" Margin="10,0" Style="{StaticResource CheckBoxStyle_napiriport}"/>
+                    <CheckBox Content="Sze" Name="cb_SZE" Grid.Column="4" Margin="5,0" Style="{StaticResource CheckBoxStyle_napiriport}"/>
+                    <CheckBox Content="Cs" Name="cb_CS" Grid.Column="5" Margin="7,0" Style="{StaticResource CheckBoxStyle_napiriport}"/>
+                    <CheckBox Content="P" Name="cb_P" Grid.Column="6" Margin="10,0" Style="{StaticResource CheckBoxStyle_napiriport}"/>
+                    <CheckBox Content="Szo" Name="cb_SZO" Grid.Column="7" Margin="4,0" Style="{StaticResource CheckBoxStyle_napiriport}"/>
+                    <CheckBox Content="V" Name="cb_V" Grid.Column="8" Margin="10,0" Style="{StaticResource CheckBoxStyle_napiriport}"/>
                 </Grid>
             </Viewbox>
             <!--Grid 2.4-->
@@ -234,7 +226,7 @@
                         <ColumnDefinition Width="8*"/>
                         <ColumnDefinition Width="1*"/>
                     </Grid.ColumnDefinitions>
-                    <Label Grid.Column="0"  Content="KLS Név:" FontSize="15" FontWeight="Medium"/>
+                    <Label Grid.Column="0"  Content="XLS Név:" FontSize="15" FontWeight="Medium"/>
                     <Border Style="{StaticResource TextBoxBorderStyle}" Grid.Column="1">
                         <TextBox Name="textbox_XLSnev" Style="{StaticResource TextBoxStyle}" HorizontalAlignment="Stretch"/>
                     </Border>

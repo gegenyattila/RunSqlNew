@@ -57,6 +57,12 @@ namespace RunSqlNew.Models
             set { SetProperty(ref cimek, value); }
         }
 
+        public string H_H_N_E
+        {
+            get { return h_h_n_e; }
+            set { SetProperty(ref h_h_n_e, value); }
+        }
+
         public string DF
         {
             get { return df; }
