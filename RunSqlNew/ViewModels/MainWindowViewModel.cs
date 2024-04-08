@@ -9,6 +9,9 @@ using System.Windows.Input;
 using Microsoft.Toolkit.Mvvm.ComponentModel;
 using RunSqlNew.Models;
 using Excel = Microsoft.Office.Interop.Excel;
+using OfficeOpenXml;
+using System.IO;
+using Microsoft.Office.Interop.Excel;
 
 namespace RunSqlNew.ViewModels
 {
@@ -28,104 +31,119 @@ namespace RunSqlNew.ViewModels
 
         public MainWindowViewModel()
         {
-            Excel.Application xlapp = new Excel.Application();
-            Excel.Workbook xlWorkbook = xlapp.Workbooks.Open("C:\\Users\\GégényAttilaGábor\\Documents\\runsqltest.xlsx");
-            Excel._Worksheet xlwoorksheet = xlWorkbook.Sheets[1];
-            Excel.Range xlRange = xlwoorksheet.UsedRange;
+            //Excel.Application xlapp = new Excel.Application();
+            //Excel.Workbook xlWorkbook = xlapp.Workbooks.Open("C:\\Users\\GégényAttilaGábor\\Documents\\runsqltest.xlsx");
+            //Excel._Worksheet xlwoorksheet = xlWorkbook.Sheets[1];
+            //Excel.Range xlRange = xlwoorksheet.UsedRange;
+
+            FileInfo file = new FileInfo("C:\\Users\\GégényAttilaGábor\\Documents\\runsqltest.xlsx");
+            ExcelPackage.LicenseContext = LicenseContext.Commercial;
 
             Datas = new ObservableCollection<ExcelDatas>();
 
-            int rowCount = xlRange.Rows.Count;
-            int colCount = xlRange.Columns.Count;
-
-            for (int i = 1; i <= rowCount; i++)
+            using (var package = new ExcelPackage(file))
             {
-                string datum = "";
-                string ido = "";
-                string riport = "";
-                string xls_kvt = "";
-                string xls_nev = "";
-                string cimek = "";
-                string h_h_n_e = "";
-                string df = "";
-                string m_nap = "";
-                string eng = "";
+                ExcelWorkbook workbook = package.Workbook;
+                ExcelWorksheet worksheet = workbook.Worksheets.First(); //SingleOrDefault(w => w.Name == "sheet1");
 
+                int rowCount = worksheet.Dimension.End.Row;
+                int colCount = worksheet.Dimension.End.Column;
 
-                for (int j = 1; j <= colCount; j++)
+                for (int i = 1; i <= rowCount; i++)
                 {
-                    //new line
-                    if (j == 1)
-                        Console.Write("\r\n");
+                    string? datum = "";
+                    string? ido = "";
+                    string? riport = "";
+                    string? xls_kvt = "";
+                    string? xls_nev = "";
+                    string? cimek = "";
+                    string? h_h_n_e = "";
+                    string? df = "";
+                    string? m_nap = "";
+                    string? eng = "";
 
-                    //write the value to the console
-                    if (xlRange.Cells[i, j] != null && xlRange.Cells[i, j].Value2 != null)
+
+                    for (int j = 1; j <= colCount; j++)
                     {
-                        switch (j)
+                        //new line
+                        if (j == 1)
+                            Console.Write("\r\n");
+
+                        //write the value to the console
+                        if (worksheet.Cells[i, j] != null && worksheet.Cells[i, j].Value != null)
                         {
-                            case 1:
-                                {
-                                    DateTime date = DateTime.FromOADate(xlRange.Cells[i, j].Value2);//.ToString();
-                                    datum = date.ToShortDateString();
-                                    break;
-                                }
-                            case 2:
-                                {
-                                    DateTime date = DateTime.FromOADate(xlRange.Cells[i, j].Value2);//.ToString();
-                                    ido = date.Hour.ToString() +":"+ date.Minute.ToString();
-                                    if(date.Minute.ToString() == "0")
+                            switch (j)
+                            {
+                                case 1:
                                     {
-                                        ido += "0";
+                                        //DateTime date = DateTime.FromOADate(DateTime.Parse(worksheet.Cells[i, j].Value));
+                                        datum = worksheet.Cells[i, j].Value.ToString(); //= date.ToShortDateString();
+                                        break;
                                     }
+                                case 2:
+                                    {
+                                        //DateTime date = DateTime.FromOADate(worksheet.Cells[i, j].Value);//.ToString();
+                                        ido = worksheet.Cells[i, j].Value.ToString();//date.Hour.ToString() + ":" + date.Minute.ToString();
+                                        //if (date.Minute.ToString() == "0")
+                                        //{
+                                        //    ido += "0";
+                                        //}
+                                        break;
+                                    }
+                                case 3:
+                                    {
+                                        riport = worksheet.Cells[i, j].Value.ToString();
+                                        break;
+                                    }
+                                case 4:
+                                    {
+                                        xls_kvt = worksheet.Cells[i, j].Value.ToString();
+                                        break;
+                                    }
+                                case 5:
+                                    {
+                                        xls_nev = worksheet.Cells[i, j].Value.ToString();
+                                        break;
+                                    }
+                                case 6:
+                                    {
+                                        cimek = worksheet.Cells[i, j].Value.ToString();
+                                        break;
+                                    }
+                                case 7:
+                                    {
+                                        h_h_n_e = worksheet.Cells[i, j].Value.ToString();
+                                        break;
+                                    }
+                                case 8:
+                                    {
+                                        df = worksheet.Cells[i, j].Value.ToString();
+                                        break;
+                                    }
+                                case 9:
+                                    {
+                                        m_nap = worksheet.Cells[i, j].Value.ToString();
+                                        break;
+                                    }
+                                case 10:
+                                    {
+                                        eng = worksheet.Cells[i, j].Value.ToString();
+                                        break;
+                                    }
+                                default:
                                     break;
-                                }
-                            case 3:
-                                {
-                                    riport = xlRange.Cells[i, j].Value2.ToString();
-                                    break;
-                                }
-                            case 4:
-                                {
-                                    xls_kvt = xlRange.Cells[i, j].Value2.ToString();
-                                    break;
-                                }
-                            case 5:
-                                {
-                                    xls_nev = xlRange.Cells[i, j].Value2.ToString();
-                                    break;
-                                }
-                            case 6:
-                                {
-                                    cimek = xlRange.Cells[i, j].Value2.ToString();
-                                    break;
-                                }
-                            case 7:
-                                {
-                                    h_h_n_e = xlRange.Cells[i, j].Value2.ToString();
-                                    break;
-                                }
-                            case 8:
-                                {
-                                    df = xlRange.Cells[i, j].Value2.ToString();
-                                    break;
-                                }
-                            case 9:
-                                {
-                                    m_nap = xlRange.Cells[i, j].Value2.ToString();
-                                    break;
-                                }
-                            case 10:
-                                {
-                                    eng = xlRange.Cells[i, j].Value2.ToString();
-                                    break;
-                                }
-                            default:
-                                break;
+                            }
                         }
-                    }  
+                    }
+                    Datas.Add(new ExcelDatas(datum, ido, riport, xls_kvt, xls_nev, cimek, h_h_n_e, df, m_nap, eng));
                 }
-                Datas.Add(new ExcelDatas(datum, ido, riport, xls_kvt, xls_nev, cimek, h_h_n_e, df, m_nap, eng));
             }
+
+
+            //int rowCount = xlRange.Rows.Count;
+            //int colCount = xlRange.Columns.Count;
+
+            
         }
     }
 }
