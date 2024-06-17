@@ -12,12 +12,6 @@ namespace Logic
 {
     public class RunSqlLogic : IRunSqlLogic
     {
-        enum MonthDayCount
-        {
-            januar = 31, februarYesLeap = 29, februarNoLeap = 28, marcius = 31, aprilis = 30, majus = 31, junius = 30, julius = 31,
-            augusztus = 31, szeptemeber = 30, oktober = 31, november = 30, december = 31
-        };
-
         //public ExcelDatas CurrentlySelected { get; set; }
         public int selectedRow { get; set; }
         public ObservableCollection<ExcelDatas> Datas { get; set; }
@@ -89,7 +83,7 @@ namespace Logic
                             {
                                 case 1:
                                     {
-                                        datum = worksheet.Cells[i, j].Value.ToString();
+                                        datum = worksheet.Cells[i, j].Value.ToString().Split(" ").FirstOrDefault();
                                         break;
                                     }
                                 case 2:

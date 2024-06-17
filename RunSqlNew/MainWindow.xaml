@@ -287,7 +287,7 @@
                         <Button Name="button_Hozzaad" Content="Hozzáad" Style="{StaticResource ButtonStyle}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Click="button_Hozzaad_Click"/>
                     </Border>
                     <Border Style="{StaticResource ButtonBorderStyle}" Grid.Column="7" HorizontalAlignment="Right">
-                        <Button Name="button_Torol" Content="Töröl" Style="{StaticResource ButtonStyle}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"/>
+                        <Button Name="button_Torol" Content="Töröl" Style="{StaticResource ButtonStyle}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Click="button_Torol_Click"/>
                     </Border>
                     <Border Style="{StaticResource ButtonBorderStyle}" Grid.Column="8" HorizontalAlignment="Right">
                         <Button Name="button_Megsem" Content="Mégsem" Style="{StaticResource ButtonStyle}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Click="button_Megsem_Click"/>
