@@ -70,11 +70,13 @@
         <!--Grid 1:-->
         <Grid Grid.Row="0" Name="Values" HorizontalAlignment="Stretch">
             <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
+                <RowDefinition Height="9*"/>
+                <RowDefinition Height="1*"/>
             </Grid.RowDefinitions>
             <!--Grid 1.1-->
             <DataGrid Name="DatasInWindow" ItemsSource="{Binding Datas, Mode=OneWay}" Background="#7B7B7B" AllowDrop="False" SelectionChanged="DataGrid_Selected"
-                      ScrollViewer.CanContentScroll="True" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Auto">
+                      ScrollViewer.CanContentScroll="True" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Auto" 
+                      SelectionMode="Single" IsReadOnly="True">
                 <DataGrid.CellStyle>
                     <Style TargetType="DataGridCell">
                         <Style.Triggers>
@@ -114,6 +116,12 @@
                 </ListBoxItem>
             </ListBox>
             -->
+            <Grid Grid.Row="1">
+                <Border Style="{StaticResource ButtonBorderStyle}" HorizontalAlignment="Right">
+                    <Button Name="button_SQL" Content="SQL betöltése" Style="{StaticResource ButtonStyle}" 
+                            HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Click="button_SQL_Click"/>
+                </Border>
+            </Grid>
         </Grid>
         <!--Grid 2:-->
         <Grid Name="Edits" Grid.Row="1" HorizontalAlignment="Stretch">
@@ -140,18 +148,20 @@
                     </Grid.ColumnDefinitions>
                     <Label Content="Dátum:" Grid.Column="0" FontSize="15" FontWeight="Medium" HorizontalAlignment="Left"/>
                     <Border Style="{StaticResource TextBoxBorderStyle}" Grid.Column="1" HorizontalAlignment="Left">
-                        <TextBox Name="textbox_Date" Style="{StaticResource TextBoxStyle}" Width="65">
+                        <TextBox Name="textbox_Date" Style="{StaticResource TextBoxStyle}" Width="65"
+                                 KeyDown="textbox_Date_KeyDown">
                             <!--Somehow set the text property to be equal to the correct cell in the selected row in order-->
                         </TextBox>
                     </Border>
                     <Label Content="Idő:" Grid.Column="2" FontSize="15" FontWeight="DemiBold" Margin="27,0,0,0"/>
                     <Border Style="{StaticResource TextBoxBorderStyle}" Grid.Column="3" HorizontalAlignment="Stretch">
-                        <TextBox Name="textbox_Time" Style="{StaticResource TextBoxStyle}" Width="65" HorizontalAlignment="Right"/>
+                        <TextBox Name="textbox_Time" Style="{StaticResource TextBoxStyle}" Width="65" HorizontalAlignment="Right"
+                                 KeyDown="textbox_Ido_KeyDown"/>
                     </Border>
                     <Border Style="{StaticResource ButtonBorderStyle}" Grid.Column="4" HorizontalAlignment="Right">
                         <Button Name="button_Most" Content="Most" Style="{StaticResource ButtonStyle}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"/>
                     </Border>
-                    <StackPanel Orientation="Horizontal" Grid.Column="5" Margin="20,0,-40,0">
+                    <StackPanel Name="stackpanel_RepFreq" Orientation="Horizontal" Grid.Column="5" Margin="20,0,-40,0">
                         <RadioButton Name ="rb_RepFreqHavi" GroupName="RiportFrequency" Margin="5,0" FontSize="12" VerticalContentAlignment="Center">Havi Riport</RadioButton>
                         <RadioButton Name ="rb_RepFreqHeti" GroupName="RiportFrequency" Margin="5,0" FontSize="12" VerticalContentAlignment="Center">Heti Riport</RadioButton>
                         <RadioButton Name ="rb_RepFreqNapi" GroupName="RiportFrequency" Margin="5,0" FontSize="12" VerticalContentAlignment="Center">Napi Riport</RadioButton>
@@ -194,7 +204,8 @@
                     </Grid.ColumnDefinitions>
                     <Label Grid.Column="0"  Content="Riport:" FontSize="15" FontWeight="Medium"/>
                     <Border Style="{StaticResource TextBoxBorderStyle}" Grid.Column="1" HorizontalAlignment="Stretch">
-                        <TextBox Name="textbox_Riport" Style="{StaticResource TextBoxStyle}" HorizontalAlignment="Stretch"/>
+                        <TextBox Name="textbox_Riport" Style="{StaticResource TextBoxStyle}" HorizontalAlignment="Stretch" 
+                                 KeyDown="textbox_Riport_KeyDown"/>
                     </Border>
                     <Border Style="{StaticResource ButtonBorderStyle}" Grid.Column="2" HorizontalAlignment="Right">
                         <Button Name="button_Riport" Content="Riport" Style="{StaticResource ButtonStyle}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"/>
@@ -211,7 +222,8 @@
                     </Grid.ColumnDefinitions>
                     <Label Grid.Column="0"  Content="XLS Kvt:" FontSize="15" FontWeight="Medium"/>
                     <Border Style="{StaticResource TextBoxBorderStyle}" Grid.Column="1" HorizontalAlignment="Stretch">
-                        <TextBox Name="textbox_XLSKVT" Style="{StaticResource TextBoxStyle}" HorizontalAlignment="Stretch"/>
+                        <TextBox Name="textbox_XLSKVT" Style="{StaticResource TextBoxStyle}" HorizontalAlignment="Stretch"
+                                 KeyDown="textbox_XLSkvt_KeyDown"/>
                     </Border>
                     <Border Style="{StaticResource ButtonBorderStyle}" Grid.Column="2" HorizontalAlignment="Right">
                         <Button Name="button_XLSKVT" Content="XLS Kvt" Style="{StaticResource ButtonStyle}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"/>
@@ -228,7 +240,8 @@
                     </Grid.ColumnDefinitions>
                     <Label Grid.Column="0"  Content="XLS Név:" FontSize="15" FontWeight="Medium"/>
                     <Border Style="{StaticResource TextBoxBorderStyle}" Grid.Column="1">
-                        <TextBox Name="textbox_XLSnev" Style="{StaticResource TextBoxStyle}" HorizontalAlignment="Stretch"/>
+                        <TextBox Name="textbox_XLSnev" Style="{StaticResource TextBoxStyle}" HorizontalAlignment="Stretch"
+                                 KeyDown="textbox_XLSnev_KeyDown"/>
                     </Border>
                     <CheckBox Content="Dátum Jelző" Name="CB_DatumJelzo" Grid.Column="2" Margin="3,0,-30,0" VerticalContentAlignment="Center" BorderBrush="#00B3CA"/>
                 </Grid>
@@ -242,7 +255,8 @@
                     </Grid.ColumnDefinitions>
                     <Label Grid.Column="0"  Content="Email:" FontSize="15" FontWeight="Medium"/>
                     <Border Style="{StaticResource TextBoxBorderStyle}" Grid.Column="1">
-                        <TextBox Name="textbox_Email" Style="{StaticResource TextBoxStyle}" HorizontalAlignment="Stretch"/>
+                        <TextBox Name="textbox_Email" Style="{StaticResource TextBoxStyle}" HorizontalAlignment="Stretch"
+                                 KeyDown="textbox_Email_KeyDown"/>
                     </Border>
                 </Grid>
             </Viewbox>
@@ -261,25 +275,26 @@
                         <ColumnDefinition Width="1*"/>
                         <ColumnDefinition Width="1*"/>
                     </Grid.ColumnDefinitions>
-                    <CheckBox Content="Engedélyezve" Name="CB_engedelyezve" Grid.Column="0" Margin="3,0,-30,0" HorizontalAlignment="Left" VerticalContentAlignment="Center" BorderBrush="#00B3CA"/>
+                    <CheckBox Content="Engedélyezve" Name="CB_engedelyezve" Grid.Column="0" Margin="3,0,-30,0" HorizontalAlignment="Left" VerticalContentAlignment="Center" BorderBrush="#00B3CA" Checked="CB_engedelyezve_Checked"/>
                     <Label Name="label_RiportNr" Content="Riport Nr: " Grid.Column="2"/>
                     <Label Grid.Column="1" Visibility="Hidden" Content="...................."/>
                     <Label Grid.Column="3"/>
                     <Label Grid.Column="4" Visibility="Hidden" Content="........."/>
                     <Border Style="{StaticResource ButtonBorderStyle}" Grid.Column="5" HorizontalAlignment="Right">
-                        <Button Name="button_Szerkeszt" Content="Szerkeszt" Style="{StaticResource ButtonStyle}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"/>
+                        <Button Name="button_Szerkeszt" Content="Szerkeszt" Style="{StaticResource ButtonStyle}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Click="button_Szerkeszt_Click"/>
                     </Border>
                     <Border Style="{StaticResource ButtonBorderStyle}" Grid.Column="6" HorizontalAlignment="Right">
-                        <Button Name="button_Hozzaad" Content="Hozzáad" Style="{StaticResource ButtonStyle}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"/>
+                        <Button Name="button_Hozzaad" Content="Hozzáad" Style="{StaticResource ButtonStyle}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Click="button_Hozzaad_Click"/>
                     </Border>
                     <Border Style="{StaticResource ButtonBorderStyle}" Grid.Column="7" HorizontalAlignment="Right">
                         <Button Name="button_Torol" Content="Töröl" Style="{StaticResource ButtonStyle}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"/>
                     </Border>
                     <Border Style="{StaticResource ButtonBorderStyle}" Grid.Column="8" HorizontalAlignment="Right">
-                        <Button Name="button_Megsem" Content="Mégsem" Style="{StaticResource ButtonStyle}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"/>
+                        <Button Name="button_Megsem" Content="Mégsem" Style="{StaticResource ButtonStyle}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Click="button_Megsem_Click"/>
                     </Border>
                     <Border Style="{StaticResource ButtonBorderStyle}" Grid.Column="9" HorizontalAlignment="Right">
-                        <Button Name="button_Mentes" Content="Mentés" Style="{StaticResource ButtonStyle}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"/>
+                        <Button Name="button_Mentes" Content="Mentés" Style="{StaticResource ButtonStyle}" 
+                                HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Click="button_Mentes_Click"/>
                     </Border>
                 </Grid>
             </Viewbox>
