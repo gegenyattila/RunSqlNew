@@ -26,19 +26,23 @@ namespace RunSqlNew
     /// </summary>
     public partial class MainWindow : Window
     {
-        enum MonthDayCount
-        {
-            januar = 31, februarYesLeap = 29, februarNoLeap = 28, marcius = 31, aprilis = 30, majus = 31, junius = 30, julius = 31,
-            augusztus = 31, szeptemeber = 30, oktober = 31, november = 30, december = 31
-        };
+        // nem kell?
+        //enum MonthDayCount
+        //{
+        //    januar = 31, februarYesLeap = 29, februarNoLeap = 28, marcius = 31, aprilis = 30, majus = 31, junius = 30, julius = 31,
+        //    augusztus = 31, szeptemeber = 30, oktober = 31, november = 30, december = 31
+        //};
 
+        // Logic osztály példány
         public IRunSqlLogic Logic;
 
+        // Main metódus, csak a megjelenítésért felelős
         public MainWindow()
         {
             InitializeComponent();
         }
 
+        // *ablak betöltődik, mi történjen*, Logic példányosítás
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             try
@@ -67,6 +71,7 @@ namespace RunSqlNew
         //string m_nap;
         //string eng;
 
+        // 1-1 elem kijelölésekor mi történjen
         private void DataGrid_Selected(object sender, RoutedEventArgs e)
         {
             int selectedIndex = DatasInWindow.SelectedIndex;
@@ -248,6 +253,7 @@ namespace RunSqlNew
             if (!Application.Current.Windows.OfType<SqlWindow>().Any(w => w.GetType().Equals(typeof(SqlWindow))))
             {
                 SqlWindow sqlwindow = new SqlWindow();
+                sqlwindow.SettingLogic(ref this.Logic);
                 sqlwindow.Show();
             }
         }

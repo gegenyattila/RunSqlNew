@@ -15,6 +15,7 @@ namespace Logic
         //public ExcelDatas CurrentlySelected { get; set; }
         public int selectedRow { get; set; }
         public ObservableCollection<ExcelDatas> Datas { get; set; }
+        public string SqlQuery { get; set; }
 
         private ExcelPackage package;
 

@@ -17,6 +17,7 @@ namespace Logic
         public string DateAppend(string s, string date);
         public void DatasSetup(string path);
 
+        public string SqlQuery { get; set; }
         //public void SaveExcel();
     }
 }

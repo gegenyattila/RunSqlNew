@@ -62,7 +62,7 @@
         </Grid.RowDefinitions>
         <Label Grid.Row="0" Content="Fájl:" VerticalContentAlignment="Bottom"/>
         <Border Style="{StaticResource TextBoxBorderStyle}" Grid.Row="1" HorizontalAlignment="Stretch">
-            <TextBox Style="{StaticResource TextBoxStyle}" VerticalContentAlignment="Center"/>
+            <TextBox Name="textbox_sqlfilepath" Style="{StaticResource TextBoxStyle}" VerticalContentAlignment="Center"/>
         </Border>
         <Border Style="{StaticResource ButtonBorderStyle}" Grid.Row="2" HorizontalAlignment="Right">
             <Button Name="ok_button" Grid.Row="2" Style="{StaticResource ButtonStyle}" Content="OK" HorizontalAlignment="Stretch" Click="Button_Click"/>
