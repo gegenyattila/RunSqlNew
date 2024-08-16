@@ -42,10 +42,14 @@ namespace RunSqlNew
             this.Logic = logic;
         }
         
-        //private void Window_Loaded(object sender, RoutedEventArgs e)
-        //{
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            this.Activate();
+            CaptureMouse();
+            textbox_sqlfilepath.CaptureMouse();
 
-        //}
+            //textbox_sqlfilepath.Select(0, 1);
+        }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
@@ -199,6 +203,14 @@ namespace RunSqlNew
             //}
 
             #endregion
+        }
+
+        private void textbox_sqlfilepath_KeyDown(object sender, KeyEventArgs e)
+        {
+            if(e.Key == Key.Enter)
+            {
+                Button_Click(sender, e);
+            }
         }
     }
 }

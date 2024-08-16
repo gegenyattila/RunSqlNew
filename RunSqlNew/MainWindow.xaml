@@ -43,6 +43,12 @@
                     </LinearGradientBrush>
                 </Setter.Value>
             </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#FFC0DEF1"/>
+                    <Setter Property="BorderBrush" Value="#FFC0DEFF"/>
+                </Trigger>
+            </Style.Triggers>
         </Style>
         <Style x:Key="TextBoxBorderStyle" TargetType="Border">
             <Setter Property="CornerRadius" Value="5"/>
@@ -158,8 +164,9 @@
                         <TextBox Name="textbox_Time" Style="{StaticResource TextBoxStyle}" Width="65" HorizontalAlignment="Right"
                                  KeyDown="textbox_Ido_KeyDown"/>
                     </Border>
-                    <Border Style="{StaticResource ButtonBorderStyle}" Grid.Column="4" HorizontalAlignment="Right">
-                        <Button Name="button_Most" Content="Most" Style="{StaticResource ButtonStyle}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"/>
+                    <Border Name="button_Most_border" Style="{StaticResource ButtonBorderStyle}" Grid.Column="4" HorizontalAlignment="Right">
+                        <Button Name="button_Most" Content="Most" Style="{StaticResource ButtonStyle}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"
+                                Click="button_Most_Click" />
                     </Border>
                     <StackPanel Name="stackpanel_RepFreq" Orientation="Horizontal" Grid.Column="5" Margin="20,0,-40,0">
                         <RadioButton Name ="rb_RepFreqHavi" GroupName="RiportFrequency" Margin="5,0" FontSize="12" VerticalContentAlignment="Center">Havi Riport</RadioButton>

@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:RunSqlNew"
         mc:Ignorable="d"
         Title="SqlWindow" MaxHeight="150" MaxWidth="300"
-        WindowState="Normal" Height="150" Width="300">
+        WindowState="Normal" Height="150" Width="300"
+        Loaded="Window_Loaded">
     <Window.Resources>
         <Style x:Key="TextBoxBorderStyle" TargetType="Border">
             <Setter Property="CornerRadius" Value="5"/>
@@ -62,7 +63,8 @@
         </Grid.RowDefinitions>
         <Label Grid.Row="0" Content="Fájl:" VerticalContentAlignment="Bottom"/>
         <Border Style="{StaticResource TextBoxBorderStyle}" Grid.Row="1" HorizontalAlignment="Stretch">
-            <TextBox Name="textbox_sqlfilepath" Style="{StaticResource TextBoxStyle}" VerticalContentAlignment="Center"/>
+            <TextBox Name="textbox_sqlfilepath" Style="{StaticResource TextBoxStyle}" VerticalContentAlignment="Center" KeyDown="textbox_sqlfilepath_KeyDown"
+                     />
         </Border>
         <Border Style="{StaticResource ButtonBorderStyle}" Grid.Row="2" HorizontalAlignment="Right">
             <Button Name="ok_button" Grid.Row="2" Style="{StaticResource ButtonStyle}" Content="OK" HorizontalAlignment="Stretch" Click="Button_Click"/>

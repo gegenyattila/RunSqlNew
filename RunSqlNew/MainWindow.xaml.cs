@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -49,14 +50,29 @@ namespace RunSqlNew
             {
                 Logic = new RunSqlLogic();
                 this.DataContext = Logic;
+
+                Thread t = new Thread(this.TimeTest);
+                t.Start();
             }
             catch (FileNotFoundException fe)
             {
                 MessageBox.Show(fe.ToString());
             }
-            catch(InvalidOperationException ie)
+            catch (InvalidOperationException ie)
             {
                 MessageBox.Show(ie.ToString(), "File not found!");
+            }
+        }
+
+        private void TimeTest()
+        {
+            while (true)
+            {
+                DateTime minta = new DateTime(2024, 7, 5, 13, 33, 0);
+                if (DateTime.Equals((DateTime.Now).ToString(), minta.ToString()))
+                {
+                    
+                }
             }
         }
 
@@ -192,7 +208,7 @@ namespace RunSqlNew
 
         private void textbox_Riport_KeyDown(object sender, KeyEventArgs e)
         {
-            if(e.Key == Key.Enter)
+            if (e.Key == Key.Enter)
             {
                 int selectedIndex = DatasInWindow.SelectedIndex;
                 Logic.Datas[selectedIndex].Riport = textbox_Riport.Text;
@@ -255,6 +271,7 @@ namespace RunSqlNew
                 SqlWindow sqlwindow = new SqlWindow();
                 sqlwindow.SettingLogic(ref this.Logic);
                 sqlwindow.Show();
+                sqlwindow.Focus();
             }
         }
 
@@ -283,7 +300,7 @@ namespace RunSqlNew
         private void CB_engedelyezve_Checked(object sender, RoutedEventArgs e)
         {
             //9. oszlop
-            if(CB_engedelyezve.IsChecked == true)
+            if (CB_engedelyezve.IsChecked == true)
             {
 
             }
@@ -291,69 +308,82 @@ namespace RunSqlNew
             //CB_engedelyezve;
         }
 
+        // Ha minden mezőben (elsősorban a dátumra vonatkozókban) valid formátumú adat van megadva, fölülírja a korábbi adatokat az újonnan megadottakkal
+        // Különben hibát dob és eredmény nélkül visszatér
+        // ( A SORREND LEHET NEM IDEÁLIS !!!!!!!!!!!!!!!! )
         private void button_Szerkeszt_Click(object sender, RoutedEventArgs e)
         {
-            if (!DateCheck(textbox_Date.Text))
+            // Dátum validitásának ellenőrzése
+            if (!DateCheck(textbox_Date.Text) || textbox_Date.Text == "")
             {
                 MessageBox.Show("Hibás dátum!");
                 return;
             }
 
-            if (!TimeCheck(textbox_Time.Text))
+            // Idő validitásának ellenőrzése
+            if (!TimeCheck(textbox_Time.Text) || textbox_Time.Text == "")
             {
                 MessageBox.Show("Hibás idő!");
                 return;
             }
-            
-                if (Logic.selectedRow != -1)
+
+            // Ellenőrzi, hogy van a kijelölt sor ( LEHET A 2 DÁTUM ELLENŐRZÉST IS EBBEN KELLENE MEGEJTENI !!!!!!!!!!!!!!!!!!!!!!!!!!! )
+            if (Logic.selectedRow != -1)
+            {
+                //DatasInWindow.AllowEditing = true;
+                //DataGridCellInfo dataGridCellInfo = new DataGridCellInfo(textbox_Date.Text, new DataGridColumn());
+                //dataGridCellInfo.Item = textbox_Date.Text;
+                //DatasInWindow.SelectedCells[0].Item = textbox_Date.Text;
+                Logic.Datas[Logic.selectedRow].Dátum = textbox_Date.Text;
+                Logic.Datas[Logic.selectedRow].Idő = textbox_Time.Text;
+                Logic.Datas[Logic.selectedRow].Riport = textbox_Riport.Text;
+                Logic.Datas[Logic.selectedRow].XLS_KVT = textbox_XLSKVT.Text;
+                Logic.Datas[Logic.selectedRow].XLS_NÉV = textbox_XLSnev.Text;
+                Logic.Datas[Logic.selectedRow].Címek = textbox_Email.Text;      // Az eredeti programban ennek a kitöltése nem kötelező !!!!!!!!!!!!!!!!!!!!!!!!
+
+                // GYAKORISÁG FORMÁTUM ELLENŐRZÉS
+                if (rb_RepFreqHavi.IsChecked == true)
+                    Logic.Datas[Logic.selectedRow].H_H_N_E = "0";
+                else if (rb_RepFreqHeti.IsChecked == true)
+                    Logic.Datas[Logic.selectedRow].H_H_N_E = "1";
+                else if (rb_RepFreqNapi.IsChecked == true)
+                    Logic.Datas[Logic.selectedRow].H_H_N_E = "2";
+                else if (rb_RepFreqEgyszer.IsChecked == true)
+                    Logic.Datas[Logic.selectedRow].H_H_N_E = "3";
+                else
                 {
-                    //DatasInWindow.AllowEditing = true;
-                    //DataGridCellInfo dataGridCellInfo = new DataGridCellInfo(textbox_Date.Text, new DataGridColumn());
-                    //dataGridCellInfo.Item = textbox_Date.Text;
-                    //DatasInWindow.SelectedCells[0].Item = textbox_Date.Text;
-                    Logic.Datas[Logic.selectedRow].Dátum = textbox_Date.Text;
-                    Logic.Datas[Logic.selectedRow].Idő = textbox_Time.Text;
-                    Logic.Datas[Logic.selectedRow].Riport = textbox_Riport.Text;
-                    Logic.Datas[Logic.selectedRow].XLS_KVT = textbox_XLSKVT.Text;
-                    Logic.Datas[Logic.selectedRow].XLS_NÉV = textbox_XLSnev.Text;
-                    Logic.Datas[Logic.selectedRow].Címek = textbox_Email.Text;
-
-                    if (rb_RepFreqHavi.IsChecked == true)
-                        Logic.Datas[Logic.selectedRow].H_H_N_E = "0";
-                    else if (rb_RepFreqHeti.IsChecked == true)
-                        Logic.Datas[Logic.selectedRow].H_H_N_E = "1";
-                    else if (rb_RepFreqNapi.IsChecked == true)
-                        Logic.Datas[Logic.selectedRow].H_H_N_E = "2";
-                    else if (rb_RepFreqEgyszer.IsChecked == true)
-                        Logic.Datas[Logic.selectedRow].H_H_N_E = "3";
-
-                    string MnapHelper = "";
-                    if (cb_H.IsChecked == true) MnapHelper += "1";
-                    else MnapHelper += "0";
-                    if (cb_K.IsChecked == true) MnapHelper += "1";
-                    else MnapHelper += "0";
-                    if (cb_SZE.IsChecked == true) MnapHelper += "1";
-                    else MnapHelper += "0";
-                    if (cb_CS.IsChecked == true) MnapHelper += "1";
-                    else MnapHelper += "0";
-                    if (cb_P.IsChecked == true) MnapHelper += "1";
-                    else MnapHelper += "0";
-                    if (cb_SZO.IsChecked == true) MnapHelper += "1";
-                    else MnapHelper += "0";
-                    if (cb_V.IsChecked == true) MnapHelper += "1";
-                    else MnapHelper += "0";
-
-                    Logic.Datas[Logic.selectedRow].M_nap = MnapHelper;
-
-                    // NEM LENNE JOBB, HA SZERKESZTÉS MEGNYOMÁSA NÉLKÜL LEHETNE ÁLLÍTANI???
-                    if (CB_engedelyezve.IsChecked == true)
-                        Logic.Datas[Logic.selectedRow].Eng = "1";
-                    else Logic.Datas[Logic.selectedRow].Eng = "0";
-
-                    DatasInWindow.Items.Refresh();
+                    MessageBox.Show("Nincs kijelölve gyakoriság! (H_H_N_E)");
+                    return;
                 }
+
+                string MnapHelper = "";
+                if (cb_H.IsChecked == true) MnapHelper += "1";
+                else MnapHelper += "0";
+                if (cb_K.IsChecked == true) MnapHelper += "1";
+                else MnapHelper += "0";
+                if (cb_SZE.IsChecked == true) MnapHelper += "1";
+                else MnapHelper += "0";
+                if (cb_CS.IsChecked == true) MnapHelper += "1";
+                else MnapHelper += "0";
+                if (cb_P.IsChecked == true) MnapHelper += "1";
+                else MnapHelper += "0";
+                if (cb_SZO.IsChecked == true) MnapHelper += "1";
+                else MnapHelper += "0";
+                if (cb_V.IsChecked == true) MnapHelper += "1";
+                else MnapHelper += "0";
+
+                Logic.Datas[Logic.selectedRow].M_nap = MnapHelper;
+
+                // NEM LENNE JOBB, HA SZERKESZTÉS MEGNYOMÁSA NÉLKÜL LEHETNE ÁLLÍTANI???
+                if (CB_engedelyezve.IsChecked == true)
+                    Logic.Datas[Logic.selectedRow].Eng = "1";
+                else Logic.Datas[Logic.selectedRow].Eng = "0";
+
+                DatasInWindow.Items.Refresh();
+            }
         }
 
+        // Dátumok valid formátumának ellenőrzése
         private bool DateCheck(string date)
         {
             //int ok = Int32.Parse(date.Split("/")[0]);
@@ -375,23 +405,23 @@ namespace RunSqlNew
                     return false;
             }
             if (date.Split("/")[0] == "03" && Int32.Parse(date.Split("/")[1]) > 31)
-                return false;   
+                return false;
             if (date.Split("/")[0] == "04" && Int32.Parse(date.Split("/")[1]) > 30)
-                return false;   
+                return false;
             if (date.Split("/")[0] == "05" && Int32.Parse(date.Split("/")[1]) > 31)
-                return false;   
+                return false;
             if (date.Split("/")[0] == "06" && Int32.Parse(date.Split("/")[1]) > 30)
-                return false;   
+                return false;
             if (date.Split("/")[0] == "07" && Int32.Parse(date.Split("/")[1]) > 31)
-                return false;   
+                return false;
             if (date.Split("/")[0] == "08" && Int32.Parse(date.Split("/")[1]) > 31)
-                return false;   
+                return false;
             if (date.Split("/")[0] == "09" && Int32.Parse(date.Split("/")[1]) > 30)
-                return false;   
+                return false;
             if (date.Split("/")[0] == "10" && Int32.Parse(date.Split("/")[1]) > 31)
-                return false;   
+                return false;
             if (date.Split("/")[0] == "11" && Int32.Parse(date.Split("/")[1]) > 30)
-                return false;   
+                return false;
             if (date.Split("/")[0] == "12" && Int32.Parse(date.Split("/")[1]) > 31)
                 return false;
             return true;
@@ -421,6 +451,7 @@ namespace RunSqlNew
         private void button_Megsem_Click(object sender, RoutedEventArgs e)
         {
             DatasInWindow.UnselectAll();
+            Logic.selectedRow = -1;     // ez kell ????????????????????????
         }
 
         // TÖRLÉS GOMB: TÖRLI AZ ÉPPEN KIJELÖLT SORT
@@ -428,6 +459,11 @@ namespace RunSqlNew
         {
             Logic.Datas.Remove(Logic.Datas[Logic.selectedRow]);
             DatasInWindow.Items.Refresh();
+        }
+
+        private void button_Most_Click(object sender, RoutedEventArgs e)
+        {
+
         }
 
         //private void DataGrid_Selected(object sender, SelectionChangedEventArgs e)
