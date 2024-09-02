@@ -26,17 +26,18 @@ namespace Logic
             // "C:\\Users\\GégényAttilaGábor\\Documents\\runsqltest.xlsx"
             selectedRow = -1;
 
-            try { 
-            DatasSetup("C:\\Users\\GégényAttilaGábor\\Documents\\runsqltest.xlsx");
-            }
-            catch(FileNotFoundException e)
-            {
-                throw e;
-            }
-            catch(InvalidOperationException e)
-            {
-                throw e;
-            }
+            //SAJÁT GÉPEN TESZT
+            //try { 
+            //DatasSetup("C:\\Users\\GégényAttilaGábor\\Documents\\runsqltest.xlsx");
+            //}
+            //catch(FileNotFoundException e)
+            //{
+            //    throw e;
+            //}
+            //catch(InvalidOperationException e)
+            //{
+            //    throw e;
+            //}
         }
 
         public void DatasSetup(string path)

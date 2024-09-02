@@ -22,6 +22,7 @@ using System.Security.Cryptography;
 using System.Data.SqlClient;
 using System.Net.NetworkInformation;
 using Logic;
+using System.Windows.Markup;
 
 namespace RunSqlNew
 {
@@ -55,18 +56,54 @@ namespace RunSqlNew
         {
             string sqlpath = textbox_sqlfilepath.Text;
 
-            if (File.Exists(sqlpath))
+            //if (File.Exists(sqlpath)) 
+            //{
+            //    //MessageBox.Show("fasza");
+            //    //{
+            //    if (sqlpath.Split('.').LastOrDefault() == ".sql")
+            //    {
+            //        this.Logic.SqlQuery = sqlpath;
+            //        Close();
+            //    }
+            //    else
+            //        MessageBox.Show("A megadott elérési út nem SQL fájlra mutat!");
+            //}
+            //else
+            //    MessageBox.Show("Nem sikerült megtalálni az SQL fájlt.");
+
+            #region új oledb próba
+
+            //string networkpath = @"\\192.168.96.9\runSql\riportok\DrinkMix";
+            //string username = "dradmin";
+            //string password = "drinks96";
+
+            // Provider = MySQLProv; Data Source = mydb; User Id = myUsername; Password = myPassword;
+            //L:\runSql\riportok\DrinkMix\DrinkMix_rendeles_adatok.sql
+
+            this.Logic.SqlQuery = sqlpath;
+
+            string connectionString = "Provider=SQLOLEDB;Data Source=192.168.96.5;User ID=dradmin;Password=drinks96";
+
+            using (OleDbConnection connection = new OleDbConnection(connectionString))
             {
-                if (sqlpath.Split('.').LastOrDefault() == ".sql")
+                OleDbCommand command = new OleDbCommand(this.Logic.SqlQuery);
+
+                command.Connection = connection;
+
+                try
                 {
-                    this.Logic.SqlQuery = sqlpath;
-                    Close();
+                    connection.Open();
+                    command.ExecuteNonQuery();
                 }
-                else
-                    MessageBox.Show("A megadott elérési út nem SQL fájlra mutat!");
+                catch
+                {
+                    MessageBox.Show("fos");
+                }
             }
-            else
-                MessageBox.Show("Nem sikerült megtalálni az SQL fájlt.");
+
+            #endregion
+
+
 
             #region rossz próbálkozások
 
@@ -101,6 +138,7 @@ namespace RunSqlNew
                 MessageBox.Show("NOPE2");
             */
             #endregion
+
             //NetworkCredential credentials = new NetworkCredential(@"dradmin", "drinks96");
             //bool CanSeeDirectory = Directory.Exists(networkpath);
 
