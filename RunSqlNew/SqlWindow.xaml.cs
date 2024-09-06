@@ -23,6 +23,7 @@ using System.Data.SqlClient;
 using System.Net.NetworkInformation;
 using Logic;
 using System.Windows.Markup;
+using OfficeOpenXml;
 
 namespace RunSqlNew
 {
@@ -120,6 +121,35 @@ namespace RunSqlNew
                     command.CommandType = System.Data.CommandType.Text;
                     using (OdbcDataReader reader = command.ExecuteReader())
                     {
+                        /* //Microsoft.Office.Interop.Excel.Application
+                        Microsoft.Office.Interop.Excel.Application app = new Microsoft.Office.Interop.Excel.Application();
+                        app.Visible = false;
+
+                        Workbook excelWorkbook = app.Workbooks.Add("runsqltest");
+
+                        //declare worksheet object:
+                        Worksheet worksheet = excelWorkbook.Worksheets["sheet1"];
+
+                        //change value of 1 cell:
+                        worksheet.Range["A1"].Value = "ok";
+                        */
+
+                        ExcelPackage.LicenseContext = LicenseContext.Commercial;
+
+                        using (var p = new ExcelPackage())
+                        {
+                            var ws = p.Workbook.Worksheets.Add("runsqltestworksheet");
+                            //ws.Cells["A1"].Value = reader[0].ToString();
+                            var ok = reader[0];
+
+                            p.SaveAs("C:\\Users\\3dkruppsystem\\Downloads\\runsqlexceltest.xlsx");
+                        }
+
+
+
+                        //var ok1 = reader.Read().ToString();
+                        //var ok2 = reader.Read();
+                        //var ok3 = reader.Read();
                         //var ok = command.CommandText;
                         //if (reader.HasRows)
                         //{
@@ -184,113 +214,113 @@ namespace RunSqlNew
             else
                 MessageBox.Show("NOPE2");
             */
-            #endregion
+                        #endregion
 
-            //NetworkCredential credentials = new NetworkCredential(@"dradmin", "drinks96");
-            //bool CanSeeDirectory = Directory.Exists(networkpath);
+                        //NetworkCredential credentials = new NetworkCredential(@"dradmin", "drinks96");
+                        //bool CanSeeDirectory = Directory.Exists(networkpath);
 
-            //\runSql\riportok\DrinkMix
+                        //\runSql\riportok\DrinkMix
 
-            //string networkpath = @"192.168.96.9";
-            //string username = "dradmin";
-            //string password = "drinks96";
+                        //string networkpath = @"192.168.96.9";
+                        //string username = "dradmin";
+                        //string password = "drinks96";
 
 
-            //SqlConnection conn = new SqlConnection();
-            //string connString = "Server=192.168.96.9\\runSql\\riportok\\DrinkMix;Database=DrinkMix_rendeles_adatok.sql;User Id=dradmin;Password=drinks96";
-            //string connString = @"Data Source=192.168.96.5;User ID=cdrunsql;Password=7BB569A26BB255BF5F";
+                        //SqlConnection conn = new SqlConnection();
+                        //string connString = "Server=192.168.96.9\\runSql\\riportok\\DrinkMix;Database=DrinkMix_rendeles_adatok.sql;User Id=dradmin;Password=drinks96";
+                        //string connString = @"Data Source=192.168.96.5;User ID=cdrunsql;Password=7BB569A26BB255BF5F";
 
-            //conn.ConnectionString = connString;
+                        //conn.ConnectionString = connString;
 
-            //conn.Open();
+                        //conn.Open();
 
-            #region OdbcConnectionStringBUILDER
+                        #region OdbcConnectionStringBUILDER
 
-            /*
-            //string connstring = "Driver={ODBC Driver 17 for SQL Server};Server=192.168.96.9;Database=cyberjani;Uid=ab;Pwd=pass@word1";
+                        /*
+                        //string connstring = "Driver={ODBC Driver 17 for SQL Server};Server=192.168.96.9;Database=cyberjani;Uid=ab;Pwd=pass@word1";
 
-            if (Directory.Exists("A:\\runSql"))
-            {
-                // ÍGY MEGTALÁLJA
-                //MessageBox.Show("okay");
-            }
+                        if (Directory.Exists("A:\\runSql"))
+                        {
+                            // ÍGY MEGTALÁLJA
+                            //MessageBox.Show("okay");
+                        }
 
-            //ODBC connstring BUILDER próbálkozás
-            
-            OdbcConnectionStringBuilder builder =
-            new OdbcConnectionStringBuilder();
-            builder.Driver = "ODBC Driver 17 for SQL Server";
+                        //ODBC connstring BUILDER próbálkozás
 
-            //builder.Add("Server", "192.168.96.9");
-            builder.Add("Dbq", "A:\\");
-            builder.Add("Uid", "dradmin");
-            builder.Add("Pwd", "drinks96");
+                        OdbcConnectionStringBuilder builder =
+                        new OdbcConnectionStringBuilder();
+                        builder.Driver = "ODBC Driver 17 for SQL Server";
 
-            try
-            {
-                using (OdbcConnection connection = new OdbcConnection(builder.ConnectionString))
-                {
-                    connection.Open();
-                    if (Directory.Exists(@"\\192.168.96.9\runSql"))
-                    {
-                        MessageBox.Show("okay");
+                        //builder.Add("Server", "192.168.96.9");
+                        builder.Add("Dbq", "A:\\");
+                        builder.Add("Uid", "dradmin");
+                        builder.Add("Pwd", "drinks96");
+
+                        try
+                        {
+                            using (OdbcConnection connection = new OdbcConnection(builder.ConnectionString))
+                            {
+                                connection.Open();
+                                if (Directory.Exists(@"\\192.168.96.9\runSql"))
+                                {
+                                    MessageBox.Show("okay");
+                                }
+                                string ok = connection.State.ToString();
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show(ex.Message);
+                        }
+                        */
+
+                        #endregion
+
+                        //string connectionString = $"DSN={networkpath};Uid={username};Pwd={password};";
+
+                        //string connectionString = $"DSN={networkpath};Database=IBMDA400;Uid={username};Pwd={password};";
+
+                        //string connectionString = "Provider=IBMDA400;Data source=cyberjani;User ID=dradmin;Password=drinks96;Force Translate=1250;";
+
+                        // ODBCConnection próbálkozás
+                        /*
+                        string connectionString = "Driver={ODBC Driver 17 for SQL Server};Server=cyberjani;Database=192.168.96.5;UID=cdrunsql;PWD=7BB569A26BB255BF5F";
+
+                        try
+                        {
+                            using (OdbcConnection connection = new OdbcConnection(connectionString))
+                            {
+                                connection.Open();
+                                if(Directory.Exists(@"\\192.168.96.9\runSql")) 
+                                {
+                                    MessageBox.Show("okay");
+                                }
+                                string ok = connection.State.ToString();
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show(ex.Message);
+                        }
+                        */
+
+                        #region OleDbConnection ConStringBUILDER
+
+                        //OleDbConnectionStringBuilder builder = new OleDbConnectionStringBuilder();
+                        //builder.ConnectionString = @"Data Source=A:\cyberjani";
+
+
+                        #endregion
+
+                        //using (OleDbConnection connection = new OleDbConnection(networkpath, credentials))
+                        //{
+
+                        //}
+
+#endregion
                     }
-                    string ok = connection.State.ToString();
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-            */
 
-            #endregion
-
-            //string connectionString = $"DSN={networkpath};Uid={username};Pwd={password};";
-
-            //string connectionString = $"DSN={networkpath};Database=IBMDA400;Uid={username};Pwd={password};";
-
-            //string connectionString = "Provider=IBMDA400;Data source=cyberjani;User ID=dradmin;Password=drinks96;Force Translate=1250;";
-
-            // ODBCConnection próbálkozás
-            /*
-            string connectionString = "Driver={ODBC Driver 17 for SQL Server};Server=cyberjani;Database=192.168.96.5;UID=cdrunsql;PWD=7BB569A26BB255BF5F";
-
-            try
-            {
-                using (OdbcConnection connection = new OdbcConnection(connectionString))
-                {
-                    connection.Open();
-                    if(Directory.Exists(@"\\192.168.96.9\runSql")) 
-                    {
-                        MessageBox.Show("okay");
-                    }
-                    string ok = connection.State.ToString();
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-            */
-
-            #region OleDbConnection ConStringBUILDER
-
-            //OleDbConnectionStringBuilder builder = new OleDbConnectionStringBuilder();
-            //builder.ConnectionString = @"Data Source=A:\cyberjani";
-
-
-            #endregion
-
-            //using (OleDbConnection connection = new OleDbConnection(networkpath, credentials))
-            //{
-
-            //}
-
-            #endregion
-        }
-
-        private void textbox_sqlfilepath_KeyDown(object sender, KeyEventArgs e)
+                    private void textbox_sqlfilepath_KeyDown(object sender, KeyEventArgs e)
         {
             if(e.Key == Key.Enter)
             {

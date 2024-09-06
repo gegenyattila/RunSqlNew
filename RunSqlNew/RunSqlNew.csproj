@@ -20,7 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="EPPlus" Version="7.1.0" />
+    <PackageReference Include="EPPlus" Version="7.3.1" />
     <PackageReference Include="Microsoft.Toolkit.Mvvm" Version="7.1.2" />
     <PackageReference Include="System.Data.Odbc" Version="8.0.0" />
     <PackageReference Include="System.Data.OleDb" Version="8.0.0" />
