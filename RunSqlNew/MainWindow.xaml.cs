@@ -92,7 +92,7 @@ namespace RunSqlNew
         {
             int selectedIndex = DatasInWindow.SelectedIndex;
 
-            if (DatasInWindow.SelectedIndex >= Logic.Datas.Count)
+            if (DatasInWindow.SelectedIndex >= Logic.Riports.Count)
                 Logic.selectedRow = -1;
             else
                 Logic.selectedRow = DatasInWindow.SelectedIndex;
@@ -211,7 +211,7 @@ namespace RunSqlNew
             if (e.Key == Key.Enter)
             {
                 int selectedIndex = DatasInWindow.SelectedIndex;
-                Logic.Datas[selectedIndex].Riport = textbox_Riport.Text;
+                Logic.Riports[selectedIndex].Riport = textbox_Riport.Text;
             }
         }
 
@@ -225,7 +225,7 @@ namespace RunSqlNew
             if (e.Key == Key.Enter)
             {
                 int selectedIndex = DatasInWindow.SelectedIndex;
-                Logic.Datas[selectedIndex].Dátum = textbox_Date.Text;
+                Logic.Riports[selectedIndex].Dátum = textbox_Date.Text;
             }
         }
 
@@ -234,7 +234,7 @@ namespace RunSqlNew
             if (e.Key == Key.Enter)
             {
                 int selectedIndex = DatasInWindow.SelectedIndex;
-                Logic.Datas[selectedIndex].Idő = textbox_Time.Text;
+                Logic.Riports[selectedIndex].Idő = textbox_Time.Text;
             }
         }
 
@@ -243,7 +243,7 @@ namespace RunSqlNew
             if (e.Key == Key.Enter)
             {
                 int selectedIndex = DatasInWindow.SelectedIndex;
-                Logic.Datas[selectedIndex].XLS_KVT = textbox_XLSKVT.Text;
+                Logic.Riports[selectedIndex].XLS_KVT = textbox_XLSKVT.Text;
             }
         }
         private void textbox_XLSnev_KeyDown(object sender, KeyEventArgs e)
@@ -251,7 +251,7 @@ namespace RunSqlNew
             if (e.Key == Key.Enter)
             {
                 int selectedIndex = DatasInWindow.SelectedIndex;
-                Logic.Datas[selectedIndex].XLS_NÉV = textbox_XLSnev.Text;
+                Logic.Riports[selectedIndex].XLS_NÉV = textbox_XLSnev.Text;
             }
         }
 
@@ -260,7 +260,7 @@ namespace RunSqlNew
             if (e.Key == Key.Enter)
             {
                 int selectedIndex = DatasInWindow.SelectedIndex;
-                Logic.Datas[selectedIndex].Címek = textbox_Email.Text;
+                Logic.Riports[selectedIndex].Címek = textbox_Email.Text;
             }
         }
 
@@ -334,22 +334,22 @@ namespace RunSqlNew
                 //DataGridCellInfo dataGridCellInfo = new DataGridCellInfo(textbox_Date.Text, new DataGridColumn());
                 //dataGridCellInfo.Item = textbox_Date.Text;
                 //DatasInWindow.SelectedCells[0].Item = textbox_Date.Text;
-                Logic.Datas[Logic.selectedRow].Dátum = textbox_Date.Text;
-                Logic.Datas[Logic.selectedRow].Idő = textbox_Time.Text;
-                Logic.Datas[Logic.selectedRow].Riport = textbox_Riport.Text;
-                Logic.Datas[Logic.selectedRow].XLS_KVT = textbox_XLSKVT.Text;
-                Logic.Datas[Logic.selectedRow].XLS_NÉV = textbox_XLSnev.Text;
-                Logic.Datas[Logic.selectedRow].Címek = textbox_Email.Text;      // Az eredeti programban ennek a kitöltése nem kötelező !!!!!!!!!!!!!!!!!!!!!!!!
+                Logic.Riports[Logic.selectedRow].Dátum = textbox_Date.Text;
+                Logic.Riports[Logic.selectedRow].Idő = textbox_Time.Text;
+                Logic.Riports[Logic.selectedRow].Riport = textbox_Riport.Text;
+                Logic.Riports[Logic.selectedRow].XLS_KVT = textbox_XLSKVT.Text;
+                Logic.Riports[Logic.selectedRow].XLS_NÉV = textbox_XLSnev.Text;
+                Logic.Riports[Logic.selectedRow].Címek = textbox_Email.Text;      // Az eredeti programban ennek a kitöltése nem kötelező !!!!!!!!!!!!!!!!!!!!!!!!
 
                 // GYAKORISÁG FORMÁTUM ELLENŐRZÉS
                 if (rb_RepFreqHavi.IsChecked == true)
-                    Logic.Datas[Logic.selectedRow].H_H_N_E = "0";
+                    Logic.Riports[Logic.selectedRow].H_H_N_E = "0";
                 else if (rb_RepFreqHeti.IsChecked == true)
-                    Logic.Datas[Logic.selectedRow].H_H_N_E = "1";
+                    Logic.Riports[Logic.selectedRow].H_H_N_E = "1";
                 else if (rb_RepFreqNapi.IsChecked == true)
-                    Logic.Datas[Logic.selectedRow].H_H_N_E = "2";
+                    Logic.Riports[Logic.selectedRow].H_H_N_E = "2";
                 else if (rb_RepFreqEgyszer.IsChecked == true)
-                    Logic.Datas[Logic.selectedRow].H_H_N_E = "3";
+                    Logic.Riports[Logic.selectedRow].H_H_N_E = "3";
                 else
                 {
                     MessageBox.Show("Nincs kijelölve gyakoriság! (H_H_N_E)");
@@ -372,12 +372,12 @@ namespace RunSqlNew
                 if (cb_V.IsChecked == true) MnapHelper += "1";
                 else MnapHelper += "0";
 
-                Logic.Datas[Logic.selectedRow].M_nap = MnapHelper;
+                Logic.Riports[Logic.selectedRow].M_nap = MnapHelper;
 
                 // NEM LENNE JOBB, HA SZERKESZTÉS MEGNYOMÁSA NÉLKÜL LEHETNE ÁLLÍTANI???
                 if (CB_engedelyezve.IsChecked == true)
-                    Logic.Datas[Logic.selectedRow].Eng = "1";
-                else Logic.Datas[Logic.selectedRow].Eng = "0";
+                    Logic.Riports[Logic.selectedRow].Eng = "1";
+                else Logic.Riports[Logic.selectedRow].Eng = "0";
 
                 DatasInWindow.Items.Refresh();
             }
@@ -457,7 +457,7 @@ namespace RunSqlNew
         // TÖRLÉS GOMB: TÖRLI AZ ÉPPEN KIJELÖLT SORT
         private void button_Torol_Click(object sender, RoutedEventArgs e)
         {
-            Logic.Datas.Remove(Logic.Datas[Logic.selectedRow]);
+            Logic.Riports.Remove(Logic.Riports[Logic.selectedRow]);
             DatasInWindow.Items.Refresh();
         }
 

@@ -56,6 +56,8 @@ namespace RunSqlNew
         {
             string sqlpath = textbox_sqlfilepath.Text;
 
+            //NOTE::: engedélyezés = 0 nem aktív | engedélyezés = 1 aktívan fut !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
             //if (File.Exists(sqlpath)) 
             //{
             //    //MessageBox.Show("fasza");
@@ -80,26 +82,71 @@ namespace RunSqlNew
             // Provider = MySQLProv; Data Source = mydb; User Id = myUsername; Password = myPassword;
             //L:\runSql\riportok\DrinkMix\DrinkMix_rendeles_adatok.sql
 
-            this.Logic.SqlQuery = sqlpath;
+            this.Logic.SqlQuery = File.ReadAllText(sqlpath);//sqlpath;
 
-            string connectionString = "Provider=SQLOLEDB;Data Source=192.168.96.5;User ID=dradmin;Password=drinks96";
+            //string connectionString = "Provider=SQLOLEDB;Data Source=192.168.96.5;User ID=cdrunsql;Password=cdrunsql";
 
-            using (OleDbConnection connection = new OleDbConnection(connectionString))
+            //string connectionString = "Driver={ODBC DRIVER 17 FOR SQL SERVER};Database=192.168.96.5;Hostname=192.168.2.10;Protocol=FTP;Port=3700;Uid=cdrunsql;Pwd=cdrunsql;";
+
+            //string connectionString = "Driver={ODBC Driver 18 for SQL Server};Server=192.168.96.5;Database=A68ac77w;UID=cdrunsql;PWD=cdrunsql;";
+
+            //ezzel majdnem működött (odbc)
+            //string connectionString = "Server = 192.168.96.5; Database = A68ac77w; UID = cdrunsql; PWD = cdrunsql;";
+
+            //string connectionString = "Provider=IBMDA400;Data Source=A68ac77w;User Id=cdrunsql;Password=cdrunsql;";
+
+            //string connectionString = "Server=192.168.96.5;Database=A68ac77w;User Id=cdrunsql;Password=cdrunsql;";
+
+            //string connectionString = "Driver={ISERIES ACCESS ODBC DRIVER};Database=A68ac77w;Hostname=192.168.96.5;Protocol=TCPIP;Port=3700;Uid=cdrunsql;Pwd=cdrunsql;";
+
+            string connectionString = "Driver={iseries Access ODBC Driver};System=192.168.96.5;Uid=cdrunsql;Pwd=cdrunsql;";
+
+            //using (SqlConnection connection = new SqlConnection(
+            //           connectionString))
+            //{
+            //    SqlCommand command = new SqlCommand(sqlpath, connection);
+            //    command.Connection.Open();
+            //    command.ExecuteNonQuery();
+            //}
+
+            using (OdbcConnection odbcConnection = new OdbcConnection(connectionString))
             {
-                OleDbCommand command = new OleDbCommand(this.Logic.SqlQuery);
+                odbcConnection.Open();
 
-                command.Connection = connection;
+                // string commandText = "";
 
-                try
+                using (OdbcCommand command = new OdbcCommand(this.Logic.SqlQuery, odbcConnection))
                 {
-                    connection.Open();
-                    command.ExecuteNonQuery();
-                }
-                catch
-                {
-                    MessageBox.Show("fos");
+                    command.CommandType = System.Data.CommandType.Text;
+                    using (OdbcDataReader reader = command.ExecuteReader())
+                    {
+                        //var ok = command.CommandText;
+                        //if (reader.HasRows)
+                        //{
+                        //    while (reader.Read())
+                        //    {
+                        //    }
+                        //}
+                    }
                 }
             }
+
+            //using (OleDbConnection connection = new OleDbConnection(connectionString))
+            //{
+            //    OleDbCommand command = new OleDbCommand(this.Logic.SqlQuery);
+
+            //    command.Connection = connection;
+
+            //    try
+            //    {
+            //        connection.Open();
+            //        command.ExecuteNonQuery();
+            //    }
+            //    catch
+            //    {
+            //        MessageBox.Show("fos");
+            //    }
+            //}
 
             #endregion
 

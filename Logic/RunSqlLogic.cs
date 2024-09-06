@@ -12,9 +12,9 @@ namespace Logic
 {
     public class RunSqlLogic : IRunSqlLogic
     {
-        //public ExcelDatas CurrentlySelected { get; set; }
+        //public Riports CurrentlySelected { get; set; }
         public int selectedRow { get; set; }
-        public ObservableCollection<ExcelDatas> Datas { get; set; }
+        public ObservableCollection<Riports> Riports { get; set; }
         public string SqlQuery { get; set; }
 
         private ExcelPackage package;
@@ -25,6 +25,8 @@ namespace Logic
             // testpath:
             // "C:\\Users\\GégényAttilaGábor\\Documents\\runsqltest.xlsx"
             selectedRow = -1;
+
+            //RiportsBuilder();
 
             //SAJÁT GÉPEN TESZT
             //try { 
@@ -49,7 +51,7 @@ namespace Logic
             FileInfo file = new FileInfo(path);
             ExcelPackage.LicenseContext = LicenseContext.Commercial;
 
-            Datas = new ObservableCollection<ExcelDatas>();
+            Riports = new ObservableCollection<Riports>();
 
             using (package = new ExcelPackage(file))
             {
@@ -139,7 +141,7 @@ namespace Logic
                             }
                         }
                     }
-                    Datas.Add(new ExcelDatas(datum, ido, riport, xls_kvt, xls_nev, cimek, h_h_n_e, df, m_nap, eng));
+                    Riports.Add(new Riports(datum, ido, riport, xls_kvt, xls_nev, cimek, h_h_n_e, df, m_nap, eng));
                 }
             }
         }
@@ -166,6 +168,26 @@ namespace Logic
 
         }
 
+        private void RiportsBuilder()
+        {
+            // Creates or loads an INI file in the same directory as your executable
+            // named EXE.ini (where EXE is the name of your executable)
+            //var MyIni = new IniFile();
+
+            // Or specify a specific name in the current dir
+            var MyIni = new IniFile("Riportok.ini");
+
+            //if (MyIni.KeyExists("RiportNR"))
+            //    bool ok1 = true;
+            //else
+            //    bool ok2 = false;
+
+            
+
+            // Or specify a specific name in a specific dir
+            //var MyIni = new IniFile(@"C:\Settings.ini");
+        }
+
         private bool PathExistance(string path)
         {
             return Directory.Exists(path);
@@ -184,52 +206,52 @@ namespace Logic
         public string ReturnDatas(int rowIndex, int colIndex)
         {
             // üres sor
-            if (rowIndex < 0 || rowIndex >= Datas.Count)
+            if (rowIndex < 0 || rowIndex >= Riports.Count)
                 return "";
-            //if (Datas[rowIndex].Dátum == null)
+            //if (Riports[rowIndex].Dátum == null)
             //    return "";
 
             switch (colIndex)
             {
                 case 1:
                     {
-                        return Datas[rowIndex].Dátum;
+                        return Riports[rowIndex].Dátum;
                     }
                 case 2:
                     {
-                        return Datas[rowIndex].Idő;
+                        return Riports[rowIndex].Idő;
                     }
                 case 3:
                     {
-                        return Datas[rowIndex].Riport;
+                        return Riports[rowIndex].Riport;
                     }
                 case 4:
                     {
-                        return Datas[rowIndex].XLS_KVT;
+                        return Riports[rowIndex].XLS_KVT;
                     }
                 case 5:
                     {
-                        return Datas[rowIndex].XLS_NÉV;
+                        return Riports[rowIndex].XLS_NÉV;
                     }
                 case 6:
                     {
-                        return Datas[rowIndex].Címek;
+                        return Riports[rowIndex].Címek;
                     }
                 case 7:
                     {
-                        return Datas[rowIndex].H_H_N_E;
+                        return Riports[rowIndex].H_H_N_E;
                     }
                 case 8:
                     {
-                        return Datas[rowIndex].DF;
+                        return Riports[rowIndex].DF;
                     }
                 case 9:
                     {
-                        return Datas[rowIndex].M_nap;
+                        return Riports[rowIndex].M_nap;
                     }
                 case 10:
                     {
-                        return Datas[rowIndex].Eng;
+                        return Riports[rowIndex].Eng;
                     }
                 default:
                     return null;
