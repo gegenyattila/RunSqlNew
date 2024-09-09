@@ -1,1 +1,83 @@
 ﻿Nr szám: hány elmentett riport van
+
+az összes gépenkét változó adatot és egyebeket kiszervezni egy INI fájlba !!!
+
+//NOTE::: engedélyezés = 0 nem aktív | engedélyezés = 1 aktívan fut
+
+
+MŰKÖDŐ ODBC CONNECTION: 
+            this.Logic.SqlQuery = File.ReadAllText(sqlpath); //sqlpath USER INPUTBÓL JÖN;
+            string connectionString = "Driver={iseries Access ODBC Driver};System=192.168.96.5;Uid=cdrunsql;Pwd=cdrunsql;";
+
+            using (OdbcConnection odbcConnection = new OdbcConnection(connectionString))
+            {
+                odbcConnection.Open();
+
+                // string commandText = "";
+
+                using (OdbcCommand command = new OdbcCommand(this.Logic.SqlQuery, odbcConnection))
+                {
+                    command.CommandType = System.Data.CommandType.Text;
+                    using (OdbcDataReader reader = command.ExecuteReader())
+                    {
+                        /* //Microsoft.Office.Interop.Excel.Application
+                        Microsoft.Office.Interop.Excel.Application app = new Microsoft.Office.Interop.Excel.Application();
+                        app.Visible = false;
+
+                        Workbook excelWorkbook = app.Workbooks.Add("runsqltest");
+
+                        //declare worksheet object:
+                        Worksheet worksheet = excelWorkbook.Worksheets["sheet1"];
+
+                        //change value of 1 cell:
+                        worksheet.Range["A1"].Value = "ok";
+                        */
+
+                        OdbcDataAdapter adapter = new OdbcDataAdapter(command);
+                        DataSet dataset = new DataSet();
+                        adapter.Fill(dataset);
+
+                        //adapter.Fill(dataset);
+
+                        System.Data.DataTable datatable = new System.Data.DataTable();
+
+                        datatable = dataset.Tables[0];
+
+                        ExcelPackage.LicenseContext = LicenseContext.Commercial;
+
+                        var p = new ExcelPackage();
+                        //var ws = p.Workbook.Worksheets.Add("runsqltestwoorksheet", datatable);
+                        XLWorkbook wb = new XLWorkbook();
+                        wb.Worksheets.Add(datatable, "exceltest");
+                        wb.SaveAs("C:\\Users\\3dkruppsystem\\Downloads\\runsqlexceltest.xlsx");
+                        //var ok = reader[0];
+
+                        p.SaveAs("C:\\Users\\3dkruppsystem\\Downloads\\runsqlexceltest.xlsx");
+                        
+                        /*
+                        //saját excel package blokkban a reader példány elveszti az adatokat
+                        //using (var p = new ExcelPackage())
+                        //{
+                        //    var ws = p.Workbook.Worksheets.Add("runsqltestworksheet");
+                        //    //ws.Cells["A1"].Value = reader[0].ToString();
+                        //    var ok = reader[0];
+
+                        //    p.SaveAs("C:\\Users\\3dkruppsystem\\Downloads\\runsqlexceltest.xlsx");
+                        //}
+
+
+
+                        //var ok1 = reader.Read().ToString();
+                        //var ok2 = reader.Read();
+                        //var ok3 = reader.Read();
+                        //var ok = command.CommandText;
+                        //if (reader.HasRows)
+                        //{
+                        //    while (reader.Read())
+                        //    {
+                        //    }
+                        //}
+                        */
+                    }
+                }
+            }

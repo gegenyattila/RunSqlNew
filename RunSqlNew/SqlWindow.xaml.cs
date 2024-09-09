@@ -24,6 +24,8 @@ using System.Net.NetworkInformation;
 using Logic;
 using System.Windows.Markup;
 using OfficeOpenXml;
+using ClosedXML.Excel;
+using DocumentFormat.OpenXml.Spreadsheet;
 
 namespace RunSqlNew
 {
@@ -55,272 +57,37 @@ namespace RunSqlNew
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            string sqlpath = textbox_sqlfilepath.Text;
-
-            //NOTE::: engedélyezés = 0 nem aktív | engedélyezés = 1 aktívan fut !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-            //if (File.Exists(sqlpath)) 
-            //{
-            //    //MessageBox.Show("fasza");
-            //    //{
-            //    if (sqlpath.Split('.').LastOrDefault() == ".sql")
-            //    {
-            //        this.Logic.SqlQuery = sqlpath;
-            //        Close();
-            //    }
-            //    else
-            //        MessageBox.Show("A megadott elérési út nem SQL fájlra mutat!");
-            //}
-            //else
-            //    MessageBox.Show("Nem sikerült megtalálni az SQL fájlt.");
-
-            #region új oledb próba
 
             //string networkpath = @"\\192.168.96.9\runSql\riportok\DrinkMix";
             //string username = "dradmin";
             //string password = "drinks96";
-
-            // Provider = MySQLProv; Data Source = mydb; User Id = myUsername; Password = myPassword;
             //L:\runSql\riportok\DrinkMix\DrinkMix_rendeles_adatok.sql
 
+            string sqlpath = textbox_sqlfilepath.Text;
             this.Logic.SqlQuery = File.ReadAllText(sqlpath);//sqlpath;
-
-            //string connectionString = "Provider=SQLOLEDB;Data Source=192.168.96.5;User ID=cdrunsql;Password=cdrunsql";
-
-            //string connectionString = "Driver={ODBC DRIVER 17 FOR SQL SERVER};Database=192.168.96.5;Hostname=192.168.2.10;Protocol=FTP;Port=3700;Uid=cdrunsql;Pwd=cdrunsql;";
-
-            //string connectionString = "Driver={ODBC Driver 18 for SQL Server};Server=192.168.96.5;Database=A68ac77w;UID=cdrunsql;PWD=cdrunsql;";
-
-            //ezzel majdnem működött (odbc)
-            //string connectionString = "Server = 192.168.96.5; Database = A68ac77w; UID = cdrunsql; PWD = cdrunsql;";
-
-            //string connectionString = "Provider=IBMDA400;Data Source=A68ac77w;User Id=cdrunsql;Password=cdrunsql;";
-
-            //string connectionString = "Server=192.168.96.5;Database=A68ac77w;User Id=cdrunsql;Password=cdrunsql;";
-
-            //string connectionString = "Driver={ISERIES ACCESS ODBC DRIVER};Database=A68ac77w;Hostname=192.168.96.5;Protocol=TCPIP;Port=3700;Uid=cdrunsql;Pwd=cdrunsql;";
-
             string connectionString = "Driver={iseries Access ODBC Driver};System=192.168.96.5;Uid=cdrunsql;Pwd=cdrunsql;";
-
-            //using (SqlConnection connection = new SqlConnection(
-            //           connectionString))
-            //{
-            //    SqlCommand command = new SqlCommand(sqlpath, connection);
-            //    command.Connection.Open();
-            //    command.ExecuteNonQuery();
-            //}
 
             using (OdbcConnection odbcConnection = new OdbcConnection(connectionString))
             {
+                OdbcDataAdapter adapter = new OdbcDataAdapter(this.Logic.SqlQuery, odbcConnection);
+
                 odbcConnection.Open();
 
-                // string commandText = "";
+                DataSet dataset = new DataSet();
 
-                using (OdbcCommand command = new OdbcCommand(this.Logic.SqlQuery, odbcConnection))
-                {
-                    command.CommandType = System.Data.CommandType.Text;
-                    using (OdbcDataReader reader = command.ExecuteReader())
-                    {
-                        /* //Microsoft.Office.Interop.Excel.Application
-                        Microsoft.Office.Interop.Excel.Application app = new Microsoft.Office.Interop.Excel.Application();
-                        app.Visible = false;
+                adapter.Fill(dataset);
 
-                        Workbook excelWorkbook = app.Workbooks.Add("runsqltest");
+                System.Data.DataTable datatable = new System.Data.DataTable();
 
-                        //declare worksheet object:
-                        Worksheet worksheet = excelWorkbook.Worksheets["sheet1"];
+                datatable = dataset.Tables[0];
 
-                        //change value of 1 cell:
-                        worksheet.Range["A1"].Value = "ok";
-                        */
-
-                        ExcelPackage.LicenseContext = LicenseContext.Commercial;
-
-                        using (var p = new ExcelPackage())
-                        {
-                            var ws = p.Workbook.Worksheets.Add("runsqltestworksheet");
-                            //ws.Cells["A1"].Value = reader[0].ToString();
-                            var ok = reader[0];
-
-                            p.SaveAs("C:\\Users\\3dkruppsystem\\Downloads\\runsqlexceltest.xlsx");
-                        }
-
-
-
-                        //var ok1 = reader.Read().ToString();
-                        //var ok2 = reader.Read();
-                        //var ok3 = reader.Read();
-                        //var ok = command.CommandText;
-                        //if (reader.HasRows)
-                        //{
-                        //    while (reader.Read())
-                        //    {
-                        //    }
-                        //}
-                    }
-                }
+                XLWorkbook wb = new XLWorkbook();
+                wb.Worksheets.Add(datatable, "exceltest");
+                wb.SaveAs("C:\\Users\\3dkruppsystem\\Downloads\\runsqlexceltest.xlsx");
             }
+        }
 
-            //using (OleDbConnection connection = new OleDbConnection(connectionString))
-            //{
-            //    OleDbCommand command = new OleDbCommand(this.Logic.SqlQuery);
-
-            //    command.Connection = connection;
-
-            //    try
-            //    {
-            //        connection.Open();
-            //        command.ExecuteNonQuery();
-            //    }
-            //    catch
-            //    {
-            //        MessageBox.Show("fos");
-            //    }
-            //}
-
-            #endregion
-
-
-
-            #region rossz próbálkozások
-
-            #region WNetAddConnection2 próbálkozás
-            /*
-            string networkpath = @"\\192.168.96.9\runSql\riportok\DrinkMix";
-            string username = "dradmin";
-            string password = "drinks96";
-
-            var netResource = new NETRESOURCE
-            {
-                dwType = 1,
-                lpRemoteName = @"\\192.168.96.9\runSql"
-            };
-
-            int result = WNetAddConnection2(ref netResource, password, username, 0);
-
-            if (result == 0)
-            {
-                if(Directory.Exists(networkpath))
-                {
-                    string folder = Directory.GetFiles(networkpath).ToString();
-                }
-                else
-                {
-                    MessageBox.Show("NOPE1");
-                }
-
-                WNetCancelConnection2(netResource.lpRemoteName, 0, true);
-            }
-            else
-                MessageBox.Show("NOPE2");
-            */
-                        #endregion
-
-                        //NetworkCredential credentials = new NetworkCredential(@"dradmin", "drinks96");
-                        //bool CanSeeDirectory = Directory.Exists(networkpath);
-
-                        //\runSql\riportok\DrinkMix
-
-                        //string networkpath = @"192.168.96.9";
-                        //string username = "dradmin";
-                        //string password = "drinks96";
-
-
-                        //SqlConnection conn = new SqlConnection();
-                        //string connString = "Server=192.168.96.9\\runSql\\riportok\\DrinkMix;Database=DrinkMix_rendeles_adatok.sql;User Id=dradmin;Password=drinks96";
-                        //string connString = @"Data Source=192.168.96.5;User ID=cdrunsql;Password=7BB569A26BB255BF5F";
-
-                        //conn.ConnectionString = connString;
-
-                        //conn.Open();
-
-                        #region OdbcConnectionStringBUILDER
-
-                        /*
-                        //string connstring = "Driver={ODBC Driver 17 for SQL Server};Server=192.168.96.9;Database=cyberjani;Uid=ab;Pwd=pass@word1";
-
-                        if (Directory.Exists("A:\\runSql"))
-                        {
-                            // ÍGY MEGTALÁLJA
-                            //MessageBox.Show("okay");
-                        }
-
-                        //ODBC connstring BUILDER próbálkozás
-
-                        OdbcConnectionStringBuilder builder =
-                        new OdbcConnectionStringBuilder();
-                        builder.Driver = "ODBC Driver 17 for SQL Server";
-
-                        //builder.Add("Server", "192.168.96.9");
-                        builder.Add("Dbq", "A:\\");
-                        builder.Add("Uid", "dradmin");
-                        builder.Add("Pwd", "drinks96");
-
-                        try
-                        {
-                            using (OdbcConnection connection = new OdbcConnection(builder.ConnectionString))
-                            {
-                                connection.Open();
-                                if (Directory.Exists(@"\\192.168.96.9\runSql"))
-                                {
-                                    MessageBox.Show("okay");
-                                }
-                                string ok = connection.State.ToString();
-                            }
-                        }
-                        catch (Exception ex)
-                        {
-                            MessageBox.Show(ex.Message);
-                        }
-                        */
-
-                        #endregion
-
-                        //string connectionString = $"DSN={networkpath};Uid={username};Pwd={password};";
-
-                        //string connectionString = $"DSN={networkpath};Database=IBMDA400;Uid={username};Pwd={password};";
-
-                        //string connectionString = "Provider=IBMDA400;Data source=cyberjani;User ID=dradmin;Password=drinks96;Force Translate=1250;";
-
-                        // ODBCConnection próbálkozás
-                        /*
-                        string connectionString = "Driver={ODBC Driver 17 for SQL Server};Server=cyberjani;Database=192.168.96.5;UID=cdrunsql;PWD=7BB569A26BB255BF5F";
-
-                        try
-                        {
-                            using (OdbcConnection connection = new OdbcConnection(connectionString))
-                            {
-                                connection.Open();
-                                if(Directory.Exists(@"\\192.168.96.9\runSql")) 
-                                {
-                                    MessageBox.Show("okay");
-                                }
-                                string ok = connection.State.ToString();
-                            }
-                        }
-                        catch (Exception ex)
-                        {
-                            MessageBox.Show(ex.Message);
-                        }
-                        */
-
-                        #region OleDbConnection ConStringBUILDER
-
-                        //OleDbConnectionStringBuilder builder = new OleDbConnectionStringBuilder();
-                        //builder.ConnectionString = @"Data Source=A:\cyberjani";
-
-
-                        #endregion
-
-                        //using (OleDbConnection connection = new OleDbConnection(networkpath, credentials))
-                        //{
-
-                        //}
-
-#endregion
-                    }
-
-                    private void textbox_sqlfilepath_KeyDown(object sender, KeyEventArgs e)
+    private void textbox_sqlfilepath_KeyDown(object sender, KeyEventArgs e)
         {
             if(e.Key == Key.Enter)
             {
