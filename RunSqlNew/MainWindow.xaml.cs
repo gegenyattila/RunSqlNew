@@ -43,7 +43,7 @@ namespace RunSqlNew
             InitializeComponent();
         }
 
-        // *ablak betöltődik, mi történjen*, Logic példányosítás
+        // Ablak betöltődésekot mi történjen, Logic példányosítás
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             try
@@ -51,8 +51,9 @@ namespace RunSqlNew
                 Logic = new RunSqlLogic();
                 this.DataContext = Logic;
 
-                Thread t = new Thread(this.TimeTest);
-                t.Start();
+                // Thread létrehozás az időzített lekérdezések kezelésére (jó helyen van?)
+                //Thread t = new Thread(this.TimeTest);
+                //t.Start();
             }
             catch (FileNotFoundException fe)
             {
@@ -64,17 +65,19 @@ namespace RunSqlNew
             }
         }
 
-        private void TimeTest()
-        {
-            while (true)
-            {
-                DateTime minta = new DateTime(2024, 7, 5, 13, 33, 0);
-                if (DateTime.Equals((DateTime.Now).ToString(), minta.ToString()))
-                {
-                    
-                }
-            }
-        }
+        #region Thread test
+        //private void TimeTest()
+        //{
+        //    while (true)
+        //    {
+        //        DateTime minta = new DateTime(2024, 7, 5, 13, 33, 0);
+        //        if (DateTime.Equals((DateTime.Now).ToString(), minta.ToString()))
+        //        {
+
+        //        }
+        //    }
+        //}
+        #endregion
 
         //string datum;
         //string ido;
@@ -87,7 +90,7 @@ namespace RunSqlNew
         //string m_nap;
         //string eng;
 
-        // 1-1 elem kijelölésekor mi történjen
+        // lekérdezések kijelölésekor UI változtatása
         private void DataGrid_Selected(object sender, RoutedEventArgs e)
         {
             int selectedIndex = DatasInWindow.SelectedIndex;
@@ -108,6 +111,7 @@ namespace RunSqlNew
             string stForM_nap = "";
             string stForEng = "";
 
+            // adatok lekérése Logic-ból
             if (this.Logic != null)
             {
                 stForDatum = Logic.ReturnDatas(selectedIndex, 1);
@@ -122,6 +126,7 @@ namespace RunSqlNew
                 stForEng = Logic.ReturnDatas(selectedIndex, 10);
             }
 
+            // UI kitöltése a lekérdezett adatokkal
             textbox_Date.Text = stForDatum;
             textbox_Time.Text = stForIdo.Split(" ").LastOrDefault();
             switch (stForH_h_n_e)
@@ -157,6 +162,7 @@ namespace RunSqlNew
                 CB_engedelyezve.IsChecked = false;
         }
 
+        // UI nap mezőjének kitöltésében segítő metódus
         private void NapHelper(string stForM_nap)
         {
             cb_M.IsChecked = false;
@@ -206,6 +212,8 @@ namespace RunSqlNew
             }
         }
 
+        // Riport mező reakció enter lenyomásra (minden gomblenyomásra meghívódik, nemcsak enterre, optimalizálható?)
+        // (a Riport gomb lenyomására is így kell reagálnia)
         private void textbox_Riport_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
@@ -215,11 +223,15 @@ namespace RunSqlNew
             }
         }
 
+        // Mentés gomb reakció (el kell mentenie a UI-on összerakott riportot
+        // (amennyiben még nincsen mégegy pont ugyanilyen a korábban mentettek között, majd meg kell jelenítenie a felületen)
+        // (valamilyen realtime frissülő ReactiveElementList-be kellene menteni a riportokat ???)
         private void button_Mentes_Click(object sender, RoutedEventArgs e)
         {
             //Logic.SaveExcel();
         }
 
+        // Dátum mező reakció enter lenyomására (minden gomblenyomásra meghívódik, nemcsak enterre, optimalizálható?)
         private void textbox_Date_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
@@ -229,6 +241,7 @@ namespace RunSqlNew
             }
         }
 
+        // Idő mező reakció enter lenyomására (minden gomblenyomásra meghívódik, nemcsak enterre, optimalizálható?)
         private void textbox_Ido_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
@@ -238,6 +251,8 @@ namespace RunSqlNew
             }
         }
 
+        // XlsKvt mező reakció enter lenyomásra (minden gomblenyomásra meghívódik, nemcsak enterre, optimalizálható?)
+        // (az XlsKvt gomb lenyomására is így kell reagálnia)
         private void textbox_XLSkvt_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
@@ -246,6 +261,8 @@ namespace RunSqlNew
                 Logic.Riports[selectedIndex].XLS_KVT = textbox_XLSKVT.Text;
             }
         }
+
+        // XlsNév mező reakció enter lenyomásra (minden gomblenyomásra meghívódik, nemcsak enterre, optimalizálható?)
         private void textbox_XLSnev_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
@@ -255,6 +272,7 @@ namespace RunSqlNew
             }
         }
 
+        // Email mező reakció enter lenyomásra (minden gomblenyomásra meghívódik, nemcsak enterre, optimalizálható?)
         private void textbox_Email_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
@@ -264,8 +282,11 @@ namespace RunSqlNew
             }
         }
 
+        // SQL betöltése gomb lenyomására adott reakció
+        // Megnyit egy SqlWindow példányt, ahol meg lehet adni a használni kívánt SQL Query-t
         private void button_SQL_Click(object sender, RoutedEventArgs e)
         {
+            // csak 1 példány lehet megnyitva ebből az ablakból
             if (!Application.Current.Windows.OfType<SqlWindow>().Any(w => w.GetType().Equals(typeof(SqlWindow))))
             {
                 SqlWindow sqlwindow = new SqlWindow();
@@ -275,6 +296,7 @@ namespace RunSqlNew
             }
         }
 
+        // UI-t feltöltő metódus meghívása
         public void SetupNewDatas(string path)
         {
             try
@@ -291,12 +313,7 @@ namespace RunSqlNew
             }
         }
 
-        public void testMethod()
-        {
-
-        }
-
-        // Engedélyezve checkbox
+        // Engedélyezve checkbox-ra adott reakció
         private void CB_engedelyezve_Checked(object sender, RoutedEventArgs e)
         {
             //9. oszlop
@@ -308,9 +325,10 @@ namespace RunSqlNew
             //CB_engedelyezve;
         }
 
+        // Szerkeszt gomb lenyomására adott reakció
         // Ha minden mezőben (elsősorban a dátumra vonatkozókban) valid formátumú adat van megadva, fölülírja a korábbi adatokat az újonnan megadottakkal
         // Különben hibát dob és eredmény nélkül visszatér
-        // ( A SORREND LEHET NEM IDEÁLIS !!!!!!!!!!!!!!!! )
+        // ( A sorrend lehet nem ideális !!! )
         private void button_Szerkeszt_Click(object sender, RoutedEventArgs e)
         {
             // Dátum validitásának ellenőrzése
@@ -327,7 +345,7 @@ namespace RunSqlNew
                 return;
             }
 
-            // Ellenőrzi, hogy van a kijelölt sor ( LEHET A 2 DÁTUM ELLENŐRZÉST IS EBBEN KELLENE MEGEJTENI !!!!!!!!!!!!!!!!!!!!!!!!!!! )
+            // Ellenőrzi, hogy van-e kijelölt sor ( LEHET A 2 DÁTUM ELLENŐRZÉST IS EBBEN KELLENE MEGEJTENI !!!!!!!!!!!!!!!!!!!!!!!!!!! )
             if (Logic.selectedRow != -1)
             {
                 //DatasInWindow.AllowEditing = true;
@@ -341,7 +359,7 @@ namespace RunSqlNew
                 Logic.Riports[Logic.selectedRow].XLS_NÉV = textbox_XLSnev.Text;
                 Logic.Riports[Logic.selectedRow].Címek = textbox_Email.Text;      // Az eredeti programban ennek a kitöltése nem kötelező !!!!!!!!!!!!!!!!!!!!!!!!
 
-                // GYAKORISÁG FORMÁTUM ELLENŐRZÉS
+                // Gyakoriság formátum ellenőrzés
                 if (rb_RepFreqHavi.IsChecked == true)
                     Logic.Riports[Logic.selectedRow].H_H_N_E = "0";
                 else if (rb_RepFreqHeti.IsChecked == true)
@@ -356,6 +374,7 @@ namespace RunSqlNew
                     return;
                 }
 
+                // Napok checkboxok végigellenőrzése
                 string MnapHelper = "";
                 if (cb_H.IsChecked == true) MnapHelper += "1";
                 else MnapHelper += "0";
@@ -372,13 +391,15 @@ namespace RunSqlNew
                 if (cb_V.IsChecked == true) MnapHelper += "1";
                 else MnapHelper += "0";
 
+                // Megadott napok betöltése a Logic megfelelő Riports példányába (átdolgozásra szorul)
                 Logic.Riports[Logic.selectedRow].M_nap = MnapHelper;
 
-                // NEM LENNE JOBB, HA SZERKESZTÉS MEGNYOMÁSA NÉLKÜL LEHETNE ÁLLÍTANI???
+                // Engedélyezve checkbox ellenőrzése, és a megfelelő adat betöltése a Logic megfelelő Riports példányába
                 if (CB_engedelyezve.IsChecked == true)
                     Logic.Riports[Logic.selectedRow].Eng = "1";
                 else Logic.Riports[Logic.selectedRow].Eng = "0";
 
+                // UI frissítése
                 DatasInWindow.Items.Refresh();
             }
         }
@@ -427,6 +448,7 @@ namespace RunSqlNew
             return true;
         }
 
+        // Idő valid formátumának ellenőrzése
         private bool TimeCheck(string time)
         {
             if (time.Split(":")[0].Count() != 2)
@@ -442,37 +464,33 @@ namespace RunSqlNew
             return true;
         }
 
+        // Hozzáad gomb lenyomására adott reakció
         private void button_Hozzaad_Click(object sender, RoutedEventArgs e)
         {
 
         }
 
-        // MÉGSEM GOMB: ELTÜNTETI A KIJELÖLÉSEKET
+        // Mégsem gomb lenyomására adott reakció
+        // Törli az riport kijelölést
         private void button_Megsem_Click(object sender, RoutedEventArgs e)
         {
             DatasInWindow.UnselectAll();
-            Logic.selectedRow = -1;     // ez kell ????????????????????????
+            Logic.selectedRow = -1;     // ez kell???
         }
 
-        // TÖRLÉS GOMB: TÖRLI AZ ÉPPEN KIJELÖLT SORT
+        // Törlés gomb lenyomására adott reakció
+        // Törli az éppen kijelölt riportot
         private void button_Torol_Click(object sender, RoutedEventArgs e)
         {
             Logic.Riports.Remove(Logic.Riports[Logic.selectedRow]);
             DatasInWindow.Items.Refresh();
         }
 
+        // Most gomb lenyomására adott reakció
+        // a kijelölt riport példány idejét az aktuális időre állítja
         private void button_Most_Click(object sender, RoutedEventArgs e)
         {
 
         }
-
-        //private void DataGrid_Selected(object sender, SelectionChangedEventArgs e)
-        //{
-        //    //if(DatasInWindow.SelectedIndex == 0)
-        //    //{
-
-        //    //}
-
-        //}
     }
 }

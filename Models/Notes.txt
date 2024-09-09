@@ -2,8 +2,9 @@
 
 az összes gépenkét változó adatot és egyebeket kiszervezni egy INI fájlba !!!
 
-//NOTE::: engedélyezés = 0 nem aktív | engedélyezés = 1 aktívan fut
+engedélyezés = 0 nem aktív | engedélyezés = 1 aktívan fut, a megadott időben lefuttatandó lekérdezés
 
+Interface fájlok ellenőrzése, hogy minden szükséges metódust tartalmaznak e !!!
 
 MŰKÖDŐ ODBC CONNECTION: 
             this.Logic.SqlQuery = File.ReadAllText(sqlpath); //sqlpath USER INPUTBÓL JÖN;

@@ -13,12 +13,21 @@ namespace Logic
     public class RunSqlLogic : IRunSqlLogic
     {
         //public Riports CurrentlySelected { get; set; }
+
+        // Éppen kijelölt riport sorának a száma
         public int selectedRow { get; set; }
+
+        // Riportok adatainak tárolására szolgáló reaktív lista
+        // Ideálisan a példányokban tárolt adatokat egy külön fájlban kellene lementeni
         public ObservableCollection<Riports> Riports { get; set; }
+
+        // SQL lekérdezést eltároló string példány
         public string SqlQuery { get; set; }
 
+        // Erre nincs szökség (???)
         private ExcelPackage package;
 
+        // Logic konstruktor
         public RunSqlLogic()
         {
 
@@ -42,6 +51,8 @@ namespace Logic
             //}
         }
 
+        // Riportok adatait kinyerő metódus, melyekkel majd feltölti a UI-t
+        // Jelenleg egy korábbi teszt feltöltés kódját tartalmazza, ilyen formában valószínűleg nem lesz szükség erre a metódusra
         public void DatasSetup(string path)
         {
             // valamiért átmegy az ellenőrzés
@@ -146,28 +157,8 @@ namespace Logic
             }
         }
 
-        // commandSql: SQL statement
-        public void DatasSetup_SqlConnection(string connectionString, string commandSql)
-        {
-            using (OleDbConnection connection = new OleDbConnection(connectionString))
-            {
-                OleDbCommand command = new OleDbCommand(commandSql);
-
-                command.Connection = connection;
-
-                try
-                {
-                    connection.Open();
-                    command.ExecuteNonQuery();
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.Message);
-                }
-            }
-
-        }
-
+        // IniFile.cs-t példányosító metódus
+        // Átdolgozandó !!!
         private void RiportsBuilder()
         {
             // Creates or loads an INI file in the same directory as your executable
@@ -188,28 +179,23 @@ namespace Logic
             //var MyIni = new IniFile(@"C:\Settings.ini");
         }
 
+        // Átadott fájl elérési út ellenőrzése
         private bool PathExistance(string path)
         {
             return Directory.Exists(path);
         }
-
-        //public void SaveExcel()
-        //{
-        //    package.SaveAs();
-        //}
 
         ~RunSqlLogic()
         {
             //SaveExcel();
         }
 
+        // adatok visszaadása UI-on való megjelenítéshez (átdolgozásra szórul, mivel üresek a Riports példányok)
         public string ReturnDatas(int rowIndex, int colIndex)
         {
             // üres sor
             if (rowIndex < 0 || rowIndex >= Riports.Count)
                 return "";
-            //if (Riports[rowIndex].Dátum == null)
-            //    return "";
 
             switch (colIndex)
             {
@@ -265,6 +251,7 @@ namespace Logic
             return strings[0] + strings[1];
         }
 
+        #region Használaton kívüli dátum helyességet ellenőrző metódus
         /*public bool CorrectDate(string date)
         {
             try
@@ -334,5 +321,6 @@ namespace Logic
                 }
             }
         */
+        #endregion
     }
 }

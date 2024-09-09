@@ -5,6 +5,7 @@ using System.Text;
 
 namespace Logic
 {
+    // Netről összeszedett .ini fájl kezelő osztály
     internal class IniFile   // revision 11
     {
         string Path;
