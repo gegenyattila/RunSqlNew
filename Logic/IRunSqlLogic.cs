@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,7 +17,8 @@ namespace Logic
         public ObservableCollection<Riports> Riports { get; set; }
         public string DateAppend(string s, string date);
         public void DatasSetup(string path);
-
+        public void OdbcConnectionSetup(string sqlpath);
+        public void ExcelAdapterAndSaver(DataTable dataTable);
         public string SqlQuery { get; set; }
         //public void SaveExcel();
     }

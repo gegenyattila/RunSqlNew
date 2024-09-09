@@ -3,10 +3,13 @@ using RunSqlNew.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Data;
 using System.Data.OleDb;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ClosedXML.Excel;
+using System.Data.Odbc;
 
 namespace Logic
 {
@@ -35,6 +38,8 @@ namespace Logic
             // "C:\\Users\\GégényAttilaGábor\\Documents\\runsqltest.xlsx"
             selectedRow = -1;
 
+            this.RiportsBuilder();
+
             //RiportsBuilder();
 
             //SAJÁT GÉPEN TESZT
@@ -59,6 +64,7 @@ namespace Logic
             //if (PathExistance(path))
             //    throw new FileNotFoundException();
 
+            #region régi teszt beolvasás
             FileInfo file = new FileInfo(path);
             ExcelPackage.LicenseContext = LicenseContext.Commercial;
 
@@ -155,34 +161,158 @@ namespace Logic
                     Riports.Add(new Riports(datum, ido, riport, xls_kvt, xls_nev, cimek, h_h_n_e, df, m_nap, eng));
                 }
             }
+            #endregion
         }
 
-        // IniFile.cs-t példányosító metódus
+        // Riportokat feldolgozó metódus
         // Átdolgozandó !!!
         private void RiportsBuilder()
         {
+            #region .ini file kezelő osztály próbálkozás
+            /*
             // Creates or loads an INI file in the same directory as your executable
             // named EXE.ini (where EXE is the name of your executable)
-            //var MyIni = new IniFile();
+            // var MyIni = new IniFile();
 
             // Or specify a specific name in the current dir
             var MyIni = new IniFile("Riportok.ini");
 
-            //if (MyIni.KeyExists("RiportNR"))
-            //    bool ok1 = true;
-            //else
-            //    bool ok2 = false;
-
-            
+            if (MyIni.KeyExists("RiportNR"))
+                ;
+            else
+                ;
 
             // Or specify a specific name in a specific dir
             //var MyIni = new IniFile(@"C:\Settings.ini");
+            */
+            #endregion
+
+            string riportsPath = Path.Combine(Directory.GetCurrentDirectory(), "Riportok.ini");
+
+            bool ok1 = PathExistance(riportsPath);
+
+            const Int32 BufferSize = 1024;
+            using (var fileStream = File.OpenRead(riportsPath))
+            using (var streamReader = new StreamReader(fileStream, Encoding.UTF8, true, BufferSize))
+            {
+                string line;
+                ObservableCollection<Riports> riportsHelperList = new ObservableCollection<Riports>();
+                while ((line = streamReader.ReadLine()) != null)
+                {
+                    if (line.Contains("RiportNR"))
+                    {
+                        string[] splitHelper = line.Split('=');
+                        int riportsHelperListCount = Int32.Parse(splitHelper[1]);
+
+                        for (int i = 0; i < riportsHelperListCount; i++)
+                        {
+                            riportsHelperList.Add(new Riports());
+                        }
+                        break;
+                    }
+                }
+
+                // Lehetne szebb kivételkezelés !!!
+                if(riportsHelperList.Count == 0)
+                    throw new ArgumentException("A Riportok.ini fájl hibás!");
+
+                int riportsCountHelper = 0;
+                //Riports helperRiport = riportsHelperList[riportsCountHelper];
+                int attributeCountHelper = 0;
+                while ((line = streamReader.ReadLine()) != null)
+                {
+                    Riports helperRiport = new Riports();
+                    if (attributeCountHelper == 10)
+                    {
+                        attributeCountHelper = 0;
+                        riportsCountHelper++;
+                    }
+
+                    string[] splitHelper = line.Split('=');
+
+                    switch (attributeCountHelper)
+                    {
+                        case 0:
+                            {
+                                riportsHelperList[riportsCountHelper].Dátum = splitHelper[1];
+                                break;
+                            }
+                        case 1:
+                            {
+                                riportsHelperList[riportsCountHelper].Idő= splitHelper[1];
+                                break;
+                            }
+                        case 2:
+                            {
+                                riportsHelperList[riportsCountHelper].Riport = splitHelper[1];
+                                break;
+                            }
+                        case 3:
+                            {
+                                riportsHelperList[riportsCountHelper].XLS_KVT = splitHelper[1];
+                                break;
+                            }
+                        case 4:
+                            {
+                                riportsHelperList[riportsCountHelper].XLS_NÉV = splitHelper[1];
+                                break;
+                            }
+                        case 5:
+                            {
+                                riportsHelperList[riportsCountHelper].Címek = splitHelper[1];
+                                break;
+                            }
+                        case 6:
+                            {
+                                riportsHelperList[riportsCountHelper].H_H_N_E = splitHelper[1];
+                                break;
+                            }
+                        case 7:
+                            {
+                                riportsHelperList[riportsCountHelper].DF = splitHelper[1];
+                                break;
+                            }
+                        case 8:
+                            {
+                                riportsHelperList[riportsCountHelper].M_nap = splitHelper[1];
+                                break;
+                            }
+                        case 9:
+                            {
+                                riportsHelperList[riportsCountHelper].Eng = splitHelper[1];
+                                break;
+                            }
+                        default:
+                            break;
+                    }
+
+                    attributeCountHelper++;
+                }
+                Riports = riportsHelperList;
+                ;
+            }
         }
 
         // Átadott fájl elérési út ellenőrzése
         private bool PathExistance(string path)
         {
-            return Directory.Exists(path);
+            int i = 0;
+            string cleanPath = "";
+            while(i < path.Length)
+            {
+                if (path[i] != '\\')
+                {
+                    cleanPath += path[i];
+                    i++;
+                }
+                else if (path[i] == '\\')
+                {
+                    cleanPath += path[i];
+                    i += 2;
+                }
+            }
+
+            return Directory.Exists(cleanPath);
         }
 
         ~RunSqlLogic()
@@ -244,11 +374,58 @@ namespace Logic
             }
         }
 
+        // Valószínűleg nem lesz szükség erre a metódusra
         public string DateAppend(string s, string date)
         {
             string[] strings = s.Split('.');
             strings[0] += date;
             return strings[0] + strings[1];
+        }
+
+        // Létrehoz egy OdbcConnection példányt, amivel képes lefuttatni az inputban megadott SQL fájlt
+        // A lehető legtöbb paramétert érdemes lenne kiszervezni egy .ini fájlba, ahol könnyen lehet szerkeszteni őket
+        public void OdbcConnectionSetup(string sqlpath)
+        {
+            //string networkpath = @"\\192.168.96.9\runSql\riportok\DrinkMix";
+            //string username = "dradmin";
+            //string password = "drinks96";
+            //L:\runSql\riportok\DrinkMix\DrinkMix_rendeles_adatok.sql
+
+            this.SqlQuery = File.ReadAllText(sqlpath);
+
+            // ConnectionString
+            string connectionString = "Driver={iseries Access ODBC Driver};System=192.168.96.5;Uid=cdrunsql;Pwd=cdrunsql;";
+
+            // A Connection létrehozása a connstring-el
+            using (OdbcConnection odbcConnection = new OdbcConnection(connectionString))
+            {
+                //adapter létrehozása az adatok kinyeréséhez
+                OdbcDataAdapter adapter = new OdbcDataAdapter(this.SqlQuery, odbcConnection);
+
+                odbcConnection.Open();
+
+                DataSet dataset = new DataSet();
+
+                //dataset feltöltése az adapter lekérdezésből származó tartalmával
+                adapter.Fill(dataset);
+
+                //datatable létrehozása az excelbe való mentéshez
+                System.Data.DataTable datatable = new System.Data.DataTable();
+
+                //datatable feltöltése a kinyert adatokkal
+                datatable = dataset.Tables[0];
+
+                // Excel-t létrehozó és elmentő metódus meghívása
+                this.ExcelAdapterAndSaver(datatable);
+            }
+        }
+
+        //excel létrehozása és mentése megadott helyre
+        public void ExcelAdapterAndSaver(DataTable datatable)
+        {
+            XLWorkbook wb = new XLWorkbook();
+            wb.Worksheets.Add(datatable, "exceltest");
+            wb.SaveAs("C:\\Users\\3dkruppsystem\\Downloads\\runsqlexceltest.xlsx");
         }
 
         #region Használaton kívüli dátum helyességet ellenőrző metódus

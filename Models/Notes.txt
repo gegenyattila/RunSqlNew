@@ -6,6 +6,10 @@ engedélyezés = 0 nem aktív | engedélyezés = 1 aktívan fut, a megadott idő
 
 Interface fájlok ellenőrzése, hogy minden szükséges metódust tartalmaznak e !!!
 
+Nagyon sok fölöslegesen include-olt library és telepített NuGet package van az összes fájlban !!!
+
+sokat keveredik az angol és a magyar a programkódban !!!
+
 MŰKÖDŐ ODBC CONNECTION: 
             this.Logic.SqlQuery = File.ReadAllText(sqlpath); //sqlpath USER INPUTBÓL JÖN;
             string connectionString = "Driver={iseries Access ODBC Driver};System=192.168.96.5;Uid=cdrunsql;Pwd=cdrunsql;";
