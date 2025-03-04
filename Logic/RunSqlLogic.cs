@@ -39,6 +39,7 @@ namespace Logic
             }
         }
 
+        // Adatok kiszedése az elérési úttal megadott excel file-ból
         public void DatasSetup(string path)
         {
             // valamiért átmegy az ellenőrzés
@@ -71,10 +72,10 @@ namespace Logic
                     string? m_nap = "";
                     string? eng = "";
 
-                    if (i == 1)
-                    {
-                        //CurrentlySelected = new ExcelDatas(datum, ido, riport, xls_kvt, xls_nev, cimek, h_h_n_e, df, m_nap, eng);
-                    }
+                    //if (i == 1)
+                    //{
+                    //    CurrentlySelected = new ExcelDatas(datum, ido, riport, xls_kvt, xls_nev, cimek, h_h_n_e, df, m_nap, eng);
+                    //}
 
                     for (int j = 1; j <= colCount; j++)
                     {
@@ -165,6 +166,7 @@ namespace Logic
 
         }
 
+        // Elérési út helyességének ellenőrzése
         private bool PathExistance(string path)
         {
             return Directory.Exists(path);
@@ -180,6 +182,7 @@ namespace Logic
             //SaveExcel();
         }
 
+        // Indexekkel megadott adat visszaadása
         public string ReturnDatas(int rowIndex, int colIndex)
         {
             // üres sor
@@ -235,6 +238,7 @@ namespace Logic
             }
         }
 
+        // Dátum formázáshoz segédfüggvény
         public string DateAppend(string s, string date)
         {
             string[] strings = s.Split('.');

@@ -48,11 +48,13 @@ namespace RunSqlNew
         {
             try
             {
+                // Logic példányosítása
                 Logic = new RunSqlLogic();
                 this.DataContext = Logic;
 
-                Thread t = new Thread(this.TimeTest);
-                t.Start();
+                // Thread teszt
+                //Thread t = new Thread(this.TimeTest);
+                //t.Start();
             }
             catch (FileNotFoundException fe)
             {
@@ -64,14 +66,18 @@ namespace RunSqlNew
             }
         }
 
+        // Thread teszt, amíg az alkalmazás fut, folyamatosan figyeli, hogy az aktuális idő megegyezik e a megadottal,
+        // ha igen, megpróbálja bezárni az alkalmazást (hibára fog futni, de ki tudja értékelni az if-et)
         private void TimeTest()
         {
+            DateTime minta = new DateTime(2025, 3, 4, 11, 56, 0);
             while (true)
             {
-                DateTime minta = new DateTime(2024, 7, 5, 13, 33, 0);
                 if (DateTime.Equals((DateTime.Now).ToString(), minta.ToString()))
                 {
-                    
+                    Console.WriteLine("fasza");
+                    //Application.Current.Shutdown();
+                    break;
                 }
             }
         }
@@ -87,16 +93,22 @@ namespace RunSqlNew
         //string m_nap;
         //string eng;
 
-        // 1-1 elem kijelölésekor mi történjen
+        // 1-1 elem kijelölésekor mi történjen, betölti a szerkeszthető mezőkbe a kijelölt elem adatait
+        // ÖTLET: visszaállítás gomb, program tárolja a kijelölt elem eredeti változatát (kijelöléskor aktuális adatokat)
+        //        és ahelyett, hogy újra ki kéne jelölgetni, ha vissza akarjuk kapni az eredeti adatokat, elég lenne csak
+        //        egy gombot megnyomni
         private void DataGrid_Selected(object sender, RoutedEventArgs e)
         {
+            // Kijelölt elem indexének lekérése
             int selectedIndex = DatasInWindow.SelectedIndex;
 
+            // Index helyességenek ellenőrzése
             if (DatasInWindow.SelectedIndex >= Logic.Datas.Count)
                 Logic.selectedRow = -1;
             else
                 Logic.selectedRow = DatasInWindow.SelectedIndex;
 
+            // Segédváltozók
             string stForDatum = "";
             string stForIdo = "";
             string stForRiport = "";
@@ -108,6 +120,7 @@ namespace RunSqlNew
             string stForM_nap = "";
             string stForEng = "";
 
+            // Segédváltozóknak értékadás
             if (this.Logic != null)
             {
                 stForDatum = Logic.ReturnDatas(selectedIndex, 1);
@@ -122,8 +135,13 @@ namespace RunSqlNew
                 stForEng = Logic.ReturnDatas(selectedIndex, 10);
             }
 
+            // Kijelölt elem dátumának szerkeszthető mezőbe illesztése
             textbox_Date.Text = stForDatum;
+
+            // Kijelölt elem idejének szerkeszthető mezőbe illesztése
             textbox_Time.Text = stForIdo.Split(" ").LastOrDefault();
+
+            // Kijelölt elem Havi-heti-napi-egyszeri futtatást megadó változó radio button-be illesztése
             switch (stForH_h_n_e)
             {
                 case "0":
@@ -145,18 +163,24 @@ namespace RunSqlNew
                     rb_RepFreqEgyszer.IsChecked = false;
                     break;
             }
+
+            // Kijelölt elem futtatandó napjainak segédfüggvénye
             NapHelper(stForM_nap);
+
+            // Kijelölt elem egyszerű string tulajdonságinak szerkeszthető mezőbe illesztése
             textbox_Riport.Text = stForRiport;
-            textbox_XLSKVT.Text = stForXls_nev;
+            textbox_XLSKVT.Text = stForXls_kvt;
             textbox_XLSnev.Text = stForXls_nev;
             textbox_Email.Text = stForCimek;
 
+            // Kijelölt elem engedélyezve tulajdonságának checkboxba illesztése
             if (stForEng == "1")
                 CB_engedelyezve.IsChecked = true;
             else
                 CB_engedelyezve.IsChecked = false;
         }
 
+        // Kijelölt elem futtatandó napjainak megjelenítése checkboxokban
         private void NapHelper(string stForM_nap)
         {
             cb_M.IsChecked = false;
@@ -206,6 +230,8 @@ namespace RunSqlNew
             }
         }
 
+        // Enter lenyomása evenet, ha a kurzor a "Riport" szerkeszthető mezőben van:
+        // szerkeszti a kijelölt elem riport tulajdonságát, hogy a szerkeszthető mezőkben lévővel megegyezzen
         private void textbox_Riport_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
@@ -215,11 +241,14 @@ namespace RunSqlNew
             }
         }
 
+        // Mentés gomb megnyomása event
         private void button_Mentes_Click(object sender, RoutedEventArgs e)
         {
             //Logic.SaveExcel();
         }
 
+        // Enter lenyomása evenet, ha a kurzor a "Dátum" szerkeszthető mezőben van:
+        // szerkeszti a kijelölt elem dátum tulajdonságát, hogy a szerkeszthető mezőkben lévővel megegyezzen
         private void textbox_Date_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
@@ -229,6 +258,8 @@ namespace RunSqlNew
             }
         }
 
+        // Enter lenyomása evenet, ha a kurzor az "Idő" szerkeszthető mezőben van:
+        // szerkeszti a kijelölt elem idő tulajdonságát, hogy a szerkeszthető mezőkben lévővel megegyezzen
         private void textbox_Ido_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
@@ -238,6 +269,8 @@ namespace RunSqlNew
             }
         }
 
+        // Enter lenyomása evenet, ha a kurzor az "XLS kvt" szerkeszthető mezőben van:
+        // szerkeszti a kijelölt elem XLSKVT tulajdonságát, hogy a szerkeszthető mezőkben lévővel megegyezzen
         private void textbox_XLSkvt_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
@@ -246,6 +279,9 @@ namespace RunSqlNew
                 Logic.Datas[selectedIndex].XLS_KVT = textbox_XLSKVT.Text;
             }
         }
+
+        // Enter lenyomása evenet, ha a kurzor az "XLS név" szerkeszthető mezőben van:
+        // szerkeszti a kijelölt elem XLSNEV tulajdonságát, hogy a szerkeszthető mezőkben lévővel megegyezzen
         private void textbox_XLSnev_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
@@ -255,6 +291,8 @@ namespace RunSqlNew
             }
         }
 
+        // Enter lenyomása evenet, ha a kurzor az "Email" szerkeszthető mezőben van:
+        // szerkeszti a kijelölt elem Email tulajdonságát, hogy a szerkeszthető mezőkben lévővel megegyezzen
         private void textbox_Email_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
@@ -264,6 +302,9 @@ namespace RunSqlNew
             }
         }
 
+        // "SQL betöltése" gomb lenyomása evenet
+        // megnyit egy új ablakot, ahova be lehet írni, melyik sql lekérdezést szeretnénk
+        // (lehet kell bele hibakezelés még, ha pl becsukódik az ablak a munkamenet közben, stb...)
         private void button_SQL_Click(object sender, RoutedEventArgs e)
         {
             if (!Application.Current.Windows.OfType<SqlWindow>().Any(w => w.GetType().Equals(typeof(SqlWindow))))
@@ -275,6 +316,7 @@ namespace RunSqlNew
             }
         }
 
+        // 
         public void SetupNewDatas(string path)
         {
             try
@@ -291,10 +333,6 @@ namespace RunSqlNew
             }
         }
 
-        public void testMethod()
-        {
-
-        }
 
         // Engedélyezve checkbox
         private void CB_engedelyezve_Checked(object sender, RoutedEventArgs e)
