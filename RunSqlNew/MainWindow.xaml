@@ -80,7 +80,7 @@
                 <RowDefinition Height="1*"/>
             </Grid.RowDefinitions>
             <!--Grid 1.1-->
-            <DataGrid Name="DatasInWindow" ItemsSource="{Binding Datas, Mode=OneWay}" Background="#7B7B7B" AllowDrop="False" SelectionChanged="DataGrid_Selected"
+            <DataGrid Name="DatasInWindow" ItemsSource="{Binding Riports, Mode=OneWay}" Background="#7B7B7B" AllowDrop="False" SelectionChanged="DataGrid_Selected"
                       ScrollViewer.CanContentScroll="True" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Auto" 
                       SelectionMode="Single" IsReadOnly="True">
                 <DataGrid.CellStyle>

@@ -43,7 +43,7 @@ namespace RunSqlNew
             InitializeComponent();
         }
 
-        // *ablak betöltődik, mi történjen*, Logic példányosítás
+        // Ablak betöltődésekot mi történjen, Logic példányosítás
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             try
@@ -52,6 +52,9 @@ namespace RunSqlNew
                 Logic = new RunSqlLogic();
                 this.DataContext = Logic;
 
+                // Thread létrehozás az időzített lekérdezések kezelésére (jó helyen van?)
+                //Thread t = new Thread(this.TimeTest);
+                //t.Start();
                 // Thread teszt
                 //Thread t = new Thread(this.TimeTest);
                 //t.Start();
@@ -237,7 +240,7 @@ namespace RunSqlNew
             if (e.Key == Key.Enter)
             {
                 int selectedIndex = DatasInWindow.SelectedIndex;
-                Logic.Datas[selectedIndex].Riport = textbox_Riport.Text;
+                Logic.Riports[selectedIndex].Riport = textbox_Riport.Text;
             }
         }
 
@@ -254,7 +257,7 @@ namespace RunSqlNew
             if (e.Key == Key.Enter)
             {
                 int selectedIndex = DatasInWindow.SelectedIndex;
-                Logic.Datas[selectedIndex].Dátum = textbox_Date.Text;
+                Logic.Riports[selectedIndex].Dátum = textbox_Date.Text;
             }
         }
 
@@ -265,7 +268,7 @@ namespace RunSqlNew
             if (e.Key == Key.Enter)
             {
                 int selectedIndex = DatasInWindow.SelectedIndex;
-                Logic.Datas[selectedIndex].Idő = textbox_Time.Text;
+                Logic.Riports[selectedIndex].Idő = textbox_Time.Text;
             }
         }
 
@@ -276,7 +279,7 @@ namespace RunSqlNew
             if (e.Key == Key.Enter)
             {
                 int selectedIndex = DatasInWindow.SelectedIndex;
-                Logic.Datas[selectedIndex].XLS_KVT = textbox_XLSKVT.Text;
+                Logic.Riports[selectedIndex].XLS_KVT = textbox_XLSKVT.Text;
             }
         }
 
@@ -287,7 +290,7 @@ namespace RunSqlNew
             if (e.Key == Key.Enter)
             {
                 int selectedIndex = DatasInWindow.SelectedIndex;
-                Logic.Datas[selectedIndex].XLS_NÉV = textbox_XLSnev.Text;
+                Logic.Riports[selectedIndex].XLS_NÉV = textbox_XLSnev.Text;
             }
         }
 
@@ -298,7 +301,7 @@ namespace RunSqlNew
             if (e.Key == Key.Enter)
             {
                 int selectedIndex = DatasInWindow.SelectedIndex;
-                Logic.Datas[selectedIndex].Címek = textbox_Email.Text;
+                Logic.Riports[selectedIndex].Címek = textbox_Email.Text;
             }
         }
 
@@ -307,6 +310,7 @@ namespace RunSqlNew
         // (lehet kell bele hibakezelés még, ha pl becsukódik az ablak a munkamenet közben, stb...)
         private void button_SQL_Click(object sender, RoutedEventArgs e)
         {
+            // csak 1 példány lehet megnyitva ebből az ablakból
             if (!Application.Current.Windows.OfType<SqlWindow>().Any(w => w.GetType().Equals(typeof(SqlWindow))))
             {
                 SqlWindow sqlwindow = new SqlWindow();
@@ -347,9 +351,10 @@ namespace RunSqlNew
             //CB_engedelyezve;
         }
 
+        // Szerkeszt gomb lenyomására adott reakció
         // Ha minden mezőben (elsősorban a dátumra vonatkozókban) valid formátumú adat van megadva, fölülírja a korábbi adatokat az újonnan megadottakkal
         // Különben hibát dob és eredmény nélkül visszatér
-        // ( A SORREND LEHET NEM IDEÁLIS !!!!!!!!!!!!!!!! )
+        // ( A sorrend lehet nem ideális !!! )
         private void button_Szerkeszt_Click(object sender, RoutedEventArgs e)
         {
             // Dátum validitásának ellenőrzése
@@ -366,35 +371,36 @@ namespace RunSqlNew
                 return;
             }
 
-            // Ellenőrzi, hogy van a kijelölt sor ( LEHET A 2 DÁTUM ELLENŐRZÉST IS EBBEN KELLENE MEGEJTENI !!!!!!!!!!!!!!!!!!!!!!!!!!! )
+            // Ellenőrzi, hogy van-e kijelölt sor ( LEHET A 2 DÁTUM ELLENŐRZÉST IS EBBEN KELLENE MEGEJTENI !!!!!!!!!!!!!!!!!!!!!!!!!!! )
             if (Logic.selectedRow != -1)
             {
                 //DatasInWindow.AllowEditing = true;
                 //DataGridCellInfo dataGridCellInfo = new DataGridCellInfo(textbox_Date.Text, new DataGridColumn());
                 //dataGridCellInfo.Item = textbox_Date.Text;
                 //DatasInWindow.SelectedCells[0].Item = textbox_Date.Text;
-                Logic.Datas[Logic.selectedRow].Dátum = textbox_Date.Text;
-                Logic.Datas[Logic.selectedRow].Idő = textbox_Time.Text;
-                Logic.Datas[Logic.selectedRow].Riport = textbox_Riport.Text;
-                Logic.Datas[Logic.selectedRow].XLS_KVT = textbox_XLSKVT.Text;
-                Logic.Datas[Logic.selectedRow].XLS_NÉV = textbox_XLSnev.Text;
-                Logic.Datas[Logic.selectedRow].Címek = textbox_Email.Text;      // Az eredeti programban ennek a kitöltése nem kötelező !!!!!!!!!!!!!!!!!!!!!!!!
+                Logic.Riports[Logic.selectedRow].Dátum = textbox_Date.Text;
+                Logic.Riports[Logic.selectedRow].Idő = textbox_Time.Text;
+                Logic.Riports[Logic.selectedRow].Riport = textbox_Riport.Text;
+                Logic.Riports[Logic.selectedRow].XLS_KVT = textbox_XLSKVT.Text;
+                Logic.Riports[Logic.selectedRow].XLS_NÉV = textbox_XLSnev.Text;
+                Logic.Riports[Logic.selectedRow].Címek = textbox_Email.Text;      // Az eredeti programban ennek a kitöltése nem kötelező !!!!!!!!!!!!!!!!!!!!!!!!
 
-                // GYAKORISÁG FORMÁTUM ELLENŐRZÉS
+                // Gyakoriság formátum ellenőrzés
                 if (rb_RepFreqHavi.IsChecked == true)
-                    Logic.Datas[Logic.selectedRow].H_H_N_E = "0";
+                    Logic.Riports[Logic.selectedRow].H_H_N_E = "0";
                 else if (rb_RepFreqHeti.IsChecked == true)
-                    Logic.Datas[Logic.selectedRow].H_H_N_E = "1";
+                    Logic.Riports[Logic.selectedRow].H_H_N_E = "1";
                 else if (rb_RepFreqNapi.IsChecked == true)
-                    Logic.Datas[Logic.selectedRow].H_H_N_E = "2";
+                    Logic.Riports[Logic.selectedRow].H_H_N_E = "2";
                 else if (rb_RepFreqEgyszer.IsChecked == true)
-                    Logic.Datas[Logic.selectedRow].H_H_N_E = "3";
+                    Logic.Riports[Logic.selectedRow].H_H_N_E = "3";
                 else
                 {
                     MessageBox.Show("Nincs kijelölve gyakoriság! (H_H_N_E)");
                     return;
                 }
 
+                // Napok checkboxok végigellenőrzése
                 string MnapHelper = "";
                 if (cb_H.IsChecked == true) MnapHelper += "1";
                 else MnapHelper += "0";
@@ -411,13 +417,15 @@ namespace RunSqlNew
                 if (cb_V.IsChecked == true) MnapHelper += "1";
                 else MnapHelper += "0";
 
-                Logic.Datas[Logic.selectedRow].M_nap = MnapHelper;
+                // Megadott napok betöltése a Logic megfelelő Riports példányába (átdolgozásra szorul)
+                Logic.Riports[Logic.selectedRow].M_nap = MnapHelper;
 
-                // NEM LENNE JOBB, HA SZERKESZTÉS MEGNYOMÁSA NÉLKÜL LEHETNE ÁLLÍTANI???
+                // Engedélyezve checkbox ellenőrzése, és a megfelelő adat betöltése a Logic megfelelő Riports példányába
                 if (CB_engedelyezve.IsChecked == true)
-                    Logic.Datas[Logic.selectedRow].Eng = "1";
-                else Logic.Datas[Logic.selectedRow].Eng = "0";
+                    Logic.Riports[Logic.selectedRow].Eng = "1";
+                else Logic.Riports[Logic.selectedRow].Eng = "0";
 
+                // UI frissítése
                 DatasInWindow.Items.Refresh();
             }
         }
@@ -466,6 +474,7 @@ namespace RunSqlNew
             return true;
         }
 
+        // Idő valid formátumának ellenőrzése
         private bool TimeCheck(string time)
         {
             if (time.Split(":")[0].Count() != 2)
@@ -481,37 +490,33 @@ namespace RunSqlNew
             return true;
         }
 
+        // Hozzáad gomb lenyomására adott reakció
         private void button_Hozzaad_Click(object sender, RoutedEventArgs e)
         {
 
         }
 
-        // MÉGSEM GOMB: ELTÜNTETI A KIJELÖLÉSEKET
+        // Mégsem gomb lenyomására adott reakció
+        // Törli az riport kijelölést
         private void button_Megsem_Click(object sender, RoutedEventArgs e)
         {
             DatasInWindow.UnselectAll();
-            Logic.selectedRow = -1;     // ez kell ????????????????????????
+            Logic.selectedRow = -1;     // ez kell???
         }
 
-        // TÖRLÉS GOMB: TÖRLI AZ ÉPPEN KIJELÖLT SORT
+        // Törlés gomb lenyomására adott reakció
+        // Törli az éppen kijelölt riportot
         private void button_Torol_Click(object sender, RoutedEventArgs e)
         {
-            Logic.Datas.Remove(Logic.Datas[Logic.selectedRow]);
+            Logic.Riports.Remove(Logic.Riports[Logic.selectedRow]);
             DatasInWindow.Items.Refresh();
         }
 
+        // Most gomb lenyomására adott reakció
+        // a kijelölt riport példány idejét az aktuális időre állítja
         private void button_Most_Click(object sender, RoutedEventArgs e)
         {
 
         }
-
-        //private void DataGrid_Selected(object sender, SelectionChangedEventArgs e)
-        //{
-        //    //if(DatasInWindow.SelectedIndex == 0)
-        //    //{
-
-        //    //}
-
-        //}
     }
 }

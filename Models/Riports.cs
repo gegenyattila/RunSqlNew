@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace RunSqlNew.Models
 {
-    public class ExcelDatas : ObservableObject
+    public class Riports : ObservableObject
     {
         private string datum;
         private string ido;
@@ -81,7 +81,7 @@ namespace RunSqlNew.Models
             set { SetProperty(ref eng, value); }
         }
 
-        public ExcelDatas()
+        public Riports()
         {
             string defualt = "nincs adat";
 
@@ -97,7 +97,7 @@ namespace RunSqlNew.Models
             eng = defualt;
         }
 
-        public ExcelDatas(string datum = "nincs adat", string ido = "nincs adat", string riport = "nincs adat",
+        public Riports(string datum = "nincs adat", string ido = "nincs adat", string riport = "nincs adat",
             string xls_kvt = "nincs adat", string xls_nev = "nincs adat", string cimek = "nincs adat",
             string h_h_n_e = "nincs adat", string df = "nincs adat", string m_nap = "nincs adat", string eng = "nincs adat")
         {
