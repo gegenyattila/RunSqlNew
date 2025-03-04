@@ -192,7 +192,7 @@ namespace RunSqlNew
             cb_SZO.IsChecked = false;
             cb_V.IsChecked = false;
 
-            // üres sor
+            // üres sor esetén nem fut végig a függvény
             if (stForM_nap == "")
                 return;
 
@@ -230,7 +230,7 @@ namespace RunSqlNew
             }
         }
 
-        // Enter lenyomása evenet, ha a kurzor a "Riport" szerkeszthető mezőben van:
+        // Enter lenyomása event, ha a kurzor a "Riport" szerkeszthető mezőben van:
         // szerkeszti a kijelölt elem riport tulajdonságát, hogy a szerkeszthető mezőkben lévővel megegyezzen
         private void textbox_Riport_KeyDown(object sender, KeyEventArgs e)
         {
@@ -247,7 +247,7 @@ namespace RunSqlNew
             //Logic.SaveExcel();
         }
 
-        // Enter lenyomása evenet, ha a kurzor a "Dátum" szerkeszthető mezőben van:
+        // Enter lenyomása event, ha a kurzor a "Dátum" szerkeszthető mezőben van:
         // szerkeszti a kijelölt elem dátum tulajdonságát, hogy a szerkeszthető mezőkben lévővel megegyezzen
         private void textbox_Date_KeyDown(object sender, KeyEventArgs e)
         {
@@ -258,7 +258,7 @@ namespace RunSqlNew
             }
         }
 
-        // Enter lenyomása evenet, ha a kurzor az "Idő" szerkeszthető mezőben van:
+        // Enter lenyomása event, ha a kurzor az "Idő" szerkeszthető mezőben van:
         // szerkeszti a kijelölt elem idő tulajdonságát, hogy a szerkeszthető mezőkben lévővel megegyezzen
         private void textbox_Ido_KeyDown(object sender, KeyEventArgs e)
         {
@@ -269,7 +269,7 @@ namespace RunSqlNew
             }
         }
 
-        // Enter lenyomása evenet, ha a kurzor az "XLS kvt" szerkeszthető mezőben van:
+        // Enter lenyomása event, ha a kurzor az "XLS kvt" szerkeszthető mezőben van:
         // szerkeszti a kijelölt elem XLSKVT tulajdonságát, hogy a szerkeszthető mezőkben lévővel megegyezzen
         private void textbox_XLSkvt_KeyDown(object sender, KeyEventArgs e)
         {
@@ -280,7 +280,7 @@ namespace RunSqlNew
             }
         }
 
-        // Enter lenyomása evenet, ha a kurzor az "XLS név" szerkeszthető mezőben van:
+        // Enter lenyomása event, ha a kurzor az "XLS név" szerkeszthető mezőben van:
         // szerkeszti a kijelölt elem XLSNEV tulajdonságát, hogy a szerkeszthető mezőkben lévővel megegyezzen
         private void textbox_XLSnev_KeyDown(object sender, KeyEventArgs e)
         {
@@ -291,7 +291,7 @@ namespace RunSqlNew
             }
         }
 
-        // Enter lenyomása evenet, ha a kurzor az "Email" szerkeszthető mezőben van:
+        // Enter lenyomása event, ha a kurzor az "Email" szerkeszthető mezőben van:
         // szerkeszti a kijelölt elem Email tulajdonságát, hogy a szerkeszthető mezőkben lévővel megegyezzen
         private void textbox_Email_KeyDown(object sender, KeyEventArgs e)
         {
@@ -302,8 +302,8 @@ namespace RunSqlNew
             }
         }
 
-        // "SQL betöltése" gomb lenyomása evenet
-        // megnyit egy új ablakot, ahova be lehet írni, melyik sql lekérdezést szeretnénk
+        // "SQL betöltése" gomb lenyomása event
+        // megnyit egy új ablakot, ahova be lehet írni, melyik sql lekérdezést szeretnénk használni
         // (lehet kell bele hibakezelés még, ha pl becsukódik az ablak a munkamenet közben, stb...)
         private void button_SQL_Click(object sender, RoutedEventArgs e)
         {
@@ -316,7 +316,8 @@ namespace RunSqlNew
             }
         }
 
-        // 
+        // Adatok kiszedése elérési úttal megadott Excel fájlból
+        // ( lehet nem excel fileból kell majd kiszedni a végén )
         public void SetupNewDatas(string path)
         {
             try
