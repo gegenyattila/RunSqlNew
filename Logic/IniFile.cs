@@ -6,6 +6,7 @@ using System.Text;
 namespace Logic
 {
     // Netről összeszedett .ini fájl kezelő osztály
+    // https://stackoverflow.com/questions/217902/reading-writing-an-ini-file
     internal class IniFile   // revision 11
     {
         string Path;

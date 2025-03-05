@@ -82,7 +82,7 @@
             <!--Grid 1.1-->
             <DataGrid Name="DatasInWindow" ItemsSource="{Binding Riports, Mode=OneWay}" Background="#7B7B7B" AllowDrop="False" SelectionChanged="DataGrid_Selected"
                       ScrollViewer.CanContentScroll="True" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Auto" 
-                      SelectionMode="Single" IsReadOnly="True">
+                      SelectionMode="Single" IsReadOnly="True" FontFamily="Segoe UI">
                 <DataGrid.CellStyle>
                     <Style TargetType="DataGridCell">
                         <Style.Triggers>

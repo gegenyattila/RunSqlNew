@@ -106,7 +106,7 @@ namespace RunSqlNew
             int selectedIndex = DatasInWindow.SelectedIndex;
 
             // Index helyességenek ellenőrzése
-            if (DatasInWindow.SelectedIndex >= Logic.Datas.Count)
+            if (DatasInWindow.SelectedIndex >= Logic.Riports.Count)
                 Logic.selectedRow = -1;
             else
                 Logic.selectedRow = DatasInWindow.SelectedIndex;
@@ -358,11 +358,14 @@ namespace RunSqlNew
         private void button_Szerkeszt_Click(object sender, RoutedEventArgs e)
         {
             // Dátum validitásának ellenőrzése
+            // FORMÁTUMRA KELL IGAZÍTANI
+            /*
             if (!DateCheck(textbox_Date.Text) || textbox_Date.Text == "")
             {
                 MessageBox.Show("Hibás dátum!");
                 return;
             }
+            */
 
             // Idő validitásának ellenőrzése
             if (!TimeCheck(textbox_Time.Text) || textbox_Time.Text == "")
@@ -386,6 +389,7 @@ namespace RunSqlNew
                 Logic.Riports[Logic.selectedRow].Címek = textbox_Email.Text;      // Az eredeti programban ennek a kitöltése nem kötelező !!!!!!!!!!!!!!!!!!!!!!!!
 
                 // Gyakoriság formátum ellenőrzés
+                // feltehetően nem kell majd a hibaüzenet, ha nincs kijelölve semmi
                 if (rb_RepFreqHavi.IsChecked == true)
                     Logic.Riports[Logic.selectedRow].H_H_N_E = "0";
                 else if (rb_RepFreqHeti.IsChecked == true)

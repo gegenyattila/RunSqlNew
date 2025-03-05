@@ -186,22 +186,34 @@ namespace Logic
             */
             #endregion
 
+            // .ini fájl elérési útjának kinyerése
+            // C:\Users\gegeny.gabor\source\repos\gegenyattila\RunSqlNew\RunSqlNew\bin\Debug\net6.0-windows
             string riportsPath = Path.Combine(Directory.GetCurrentDirectory(), "Riportok.ini");
 
+            // Elérési út helyességének ellenőrzése
             bool ok1 = PathExistance(riportsPath);
 
+            // Fájl megnyitása és feldolgozása
             const Int32 BufferSize = 1024;
             using (var fileStream = File.OpenRead(riportsPath))
             using (var streamReader = new StreamReader(fileStream, Encoding.UTF8, true, BufferSize))
             {
+                // Egyes sorokat kezelő és az elemeket tároló (lista) segédváltozók
                 string line;
                 ObservableCollection<Riports> riportsHelperList = new ObservableCollection<Riports>();
+
+                int riportsHelperListCount = 0;
+
+                // .ini fájlon végigiterálás
+                // (Ez a while csak riportok számát keresi ki)
                 while ((line = streamReader.ReadLine()) != null)
                 {
+                    // CSAK AKKOR HOZZA LÉTRE A MEGFELELŐ SZÁMÚ (üres) "Riports" PÉLDÁNYOKBÓL ÁLLÓ LISTÁT,
+                    // HA BENNE VAN A "RiportNR" sor, ami megmondja, hogy hány különböző riport van
                     if (line.Contains("RiportNR"))
                     {
                         string[] splitHelper = line.Split('=');
-                        int riportsHelperListCount = Int32.Parse(splitHelper[1]);
+                        riportsHelperListCount = Int32.Parse(splitHelper[1]);
 
                         for (int i = 0; i < riportsHelperListCount; i++)
                         {
@@ -212,83 +224,108 @@ namespace Logic
                 }
 
                 // Lehetne szebb kivételkezelés !!!
-                if(riportsHelperList.Count == 0)
-                    throw new ArgumentException("A Riportok.ini fájl hibás!");
+                if(riportsHelperList.Count == 0 || riportsHelperListCount == 0)
+                    throw new ArgumentException("A Riportok.ini fájl hibás, vagy üres!");
 
+                // Elemek felodlgozásához segédváltozók:
+                // Hány riportnál tartunk
                 int riportsCountHelper = 0;
-                //Riports helperRiport = riportsHelperList[riportsCountHelper];
+                // Riporton belül hány attributumnál tatunk
                 int attributeCountHelper = 0;
-                while ((line = streamReader.ReadLine()) != null)
+                // Attributumok száma (ha változik a struktúra, átírandó!)
+                int attributeCount = 10;
+
+                // .ini fájlon végigiterálás
+                // Hard coded ciklus, csak az attributeCount változóban megadótt darabszámú tulajdonsággal működik rendeltetésszerűen!
+                // Akkor fut le, ha: -még nem értük el a fájl végét, -nem futunk üres sorra, -a riport számláló kisebb, mint a .ini fájlból kinyert RiportNR szám
+                while ((line = streamReader.ReadLine()) != null && line != "" && riportsCountHelper < riportsHelperListCount)
                 {
-                    Riports helperRiport = new Riports();
-                    if (attributeCountHelper == 10)
+                    // Ellenőrzi, hogy az adott riporton belül hány attribútumnál tartunk. Ha a számláló elérte a megadott számot (=10),
+                    // akkor visszaállítja 0-ra az attribútum számot és megnöveli a riport számlálót
+                    if (attributeCountHelper == attributeCount)
                     {
                         attributeCountHelper = 0;
                         riportsCountHelper++;
                     }
-
-                    string[] splitHelper = line.Split('=');
-
-                    switch (attributeCountHelper)
+                    
+                    // Mielőtt megkezdi a sor feldolgozását, ellenőrzi, hogy biztosan attribútumot tartalmaz-e
+                    if (line.Contains('=') && !line.Contains("RiportNR") && !line.Contains("[Riport]"))
                     {
-                        case 0:
-                            {
-                                riportsHelperList[riportsCountHelper].Dátum = splitHelper[1];
+                        // Aktuális sor szétválasztása '='-nél
+                        string[] splitHelper = line.Split('=');
+                        
+                        /*
+                        if (int.Parse(splitHelper[0].LastOrDefault().ToString()) != riportsCountHelper)
+                        {
+                            attributeCountHelper = 0;
+                            riportsCountHelper++;
+                        }
+                        */
+
+                        // Az attribútum számláló alapján meghatározza, hogy hanyadik attribútum-ot kell beállítania
+                        switch (attributeCountHelper)
+                        {
+                            case 0:
+                                {
+                                    riportsHelperList[riportsCountHelper].Dátum = splitHelper[1];
+                                    break;
+                                }
+                            case 1:
+                                {
+                                    riportsHelperList[riportsCountHelper].Idő = splitHelper[1];
+                                    break;
+                                }
+                            case 2:
+                                {
+                                    riportsHelperList[riportsCountHelper].Riport = splitHelper[1];
+                                    break;
+                                }
+                            case 3:
+                                {
+                                    riportsHelperList[riportsCountHelper].XLS_KVT = splitHelper[1];
+                                    break;
+                                }
+                            case 4:
+                                {
+                                    riportsHelperList[riportsCountHelper].XLS_NÉV = splitHelper[1];
+                                    break;
+                                }
+                            case 5:
+                                {
+                                    riportsHelperList[riportsCountHelper].Címek = splitHelper[1];
+                                    break;
+                                }
+                            case 6:
+                                {
+                                    riportsHelperList[riportsCountHelper].H_H_N_E = splitHelper[1];
+                                    break;
+                                }
+                            case 7:
+                                {
+                                    riportsHelperList[riportsCountHelper].DF = splitHelper[1];
+                                    break;
+                                }
+                            case 8:
+                                {
+                                    riportsHelperList[riportsCountHelper].M_nap = splitHelper[1];
+                                    break;
+                                }
+                            case 9:
+                                {
+                                    riportsHelperList[riportsCountHelper].Eng = splitHelper[1];
+                                    break;
+                                }
+                            default:
                                 break;
-                            }
-                        case 1:
-                            {
-                                riportsHelperList[riportsCountHelper].Idő= splitHelper[1];
-                                break;
-                            }
-                        case 2:
-                            {
-                                riportsHelperList[riportsCountHelper].Riport = splitHelper[1];
-                                break;
-                            }
-                        case 3:
-                            {
-                                riportsHelperList[riportsCountHelper].XLS_KVT = splitHelper[1];
-                                break;
-                            }
-                        case 4:
-                            {
-                                riportsHelperList[riportsCountHelper].XLS_NÉV = splitHelper[1];
-                                break;
-                            }
-                        case 5:
-                            {
-                                riportsHelperList[riportsCountHelper].Címek = splitHelper[1];
-                                break;
-                            }
-                        case 6:
-                            {
-                                riportsHelperList[riportsCountHelper].H_H_N_E = splitHelper[1];
-                                break;
-                            }
-                        case 7:
-                            {
-                                riportsHelperList[riportsCountHelper].DF = splitHelper[1];
-                                break;
-                            }
-                        case 8:
-                            {
-                                riportsHelperList[riportsCountHelper].M_nap = splitHelper[1];
-                                break;
-                            }
-                        case 9:
-                            {
-                                riportsHelperList[riportsCountHelper].Eng = splitHelper[1];
-                                break;
-                            }
-                        default:
-                            break;
+                        }
                     }
 
+                    // Attribútum számláló növelése
                     attributeCountHelper++;
                 }
+
+                // Teljes segédlista betöltése a Logic osztály saját, végleges listájába
                 Riports = riportsHelperList;
-                ;
             }
         }
 
@@ -326,6 +363,7 @@ namespace Logic
             if (rowIndex < 0 || rowIndex >= Riports.Count)
                 return "";
 
+            // Megfelelő oszlop kiválasztása
             switch (colIndex)
             {
                 case 1:
@@ -419,9 +457,10 @@ namespace Logic
             }
         }
 
-        //excel létrehozása és mentése megadott helyre
+        //excel létrehozása és mentése megadott helyre !!! RÉGI, JELENLEG BIZTOS, HOGY ROSSZUL MŰKÖDIK !!!
         public void ExcelAdapterAndSaver(DataTable datatable)
         {
+            return;
             XLWorkbook wb = new XLWorkbook();
             wb.Worksheets.Add(datatable, "exceltest");
             wb.SaveAs("C:\\Users\\3dkruppsystem\\Downloads\\runsqlexceltest.xlsx");
