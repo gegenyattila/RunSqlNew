@@ -30,9 +30,11 @@ namespace RunSqlNew.ViewModels
     {
         public IRunSqlLogic Logic;
 
-        public MainWindowViewModel()
-        {
+        public ObservableCollection<Riports> Riports => Logic.Riports;
 
+        public MainWindowViewModel(IRunSqlLogic logic)
+        {
+            this.Logic = logic;
         }
     }
 }

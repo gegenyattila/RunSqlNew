@@ -1,6 +1,7 @@
 ﻿using Microsoft.Toolkit.Mvvm.ComponentModel;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace RunSqlNew.Models
 {
-    public class Riports : ObservableObject
+    public class Riports : ObservableObject, INotifyPropertyChanged
     {
         private string datum;
         private string ido;

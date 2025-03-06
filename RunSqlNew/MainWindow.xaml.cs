@@ -35,12 +35,14 @@ namespace RunSqlNew
         //};
 
         // Logic osztály példány
-        public IRunSqlLogic Logic;
+        public IRunSqlLogic Logic { get; set; }
 
         // Main metódus, csak a megjelenítésért felelős
         public MainWindow()
         {
             InitializeComponent();
+            Logic = new RunSqlLogic();
+            DataContext = new MainWindowViewModel(Logic);
         }
 
         // Ablak betöltődésekot mi történjen, Logic példányosítás
@@ -49,8 +51,8 @@ namespace RunSqlNew
             try
             {
                 // Logic példányosítása
-                Logic = new RunSqlLogic();
-                this.DataContext = Logic;
+                //Logic = new RunSqlLogic();
+                //this.DataContext = Logic;
 
                 // Thread létrehozás az időzített lekérdezések kezelésére (jó helyen van?)
                 //Thread t = new Thread(this.TimeTest);
@@ -194,43 +196,62 @@ namespace RunSqlNew
             cb_P.IsChecked = false;
             cb_SZO.IsChecked = false;
             cb_V.IsChecked = false;
+            cb_MN.IsChecked = false;
 
             // üres sor esetén nem fut végig a függvény
             if (stForM_nap == "")
                 return;
 
+            // A specifikált karaktersorozat esetén minden napot szükséges lenne bejelölni, de elég a Minden Nap checkbox-ot true-ra állítani
+            if(stForM_nap == "01111111")
+            {
+                //cb_H.IsChecked = true;
+                //cb_K.IsChecked = true;
+                //cb_SZE.IsChecked = true;
+                //cb_CS.IsChecked = true;
+                //cb_P.IsChecked = true;
+                //cb_SZO.IsChecked = true;
+                //cb_V.IsChecked = true;
+                cb_MN.IsChecked = true;
+                return;
+            }
+
             if (stForM_nap[0].Equals('1'))
-            {
                 cb_M.IsChecked = true;
-            }
             if (stForM_nap[1].Equals('1'))
-            {
                 cb_H.IsChecked = true;
-            }
             if (stForM_nap[2].Equals('1'))
-            {
                 cb_K.IsChecked = true;
-            }
             if (stForM_nap[3].Equals('1'))
-            {
                 cb_SZE.IsChecked = true;
-            }
             if (stForM_nap[4].Equals('1'))
-            {
                 cb_CS.IsChecked = true;
-            }
             if (stForM_nap[5].Equals('1'))
-            {
                 cb_P.IsChecked = true;
-            }
             if (stForM_nap[6].Equals('1'))
-            {
                 cb_SZO.IsChecked = true;
-            }
             if (stForM_nap[7].Equals('1'))
-            {
                 cb_V.IsChecked = true;
-            }
+        }
+
+        // "Minden nap" checkbox bepipálása event, az összes többi checkboxből eltüntethető a pipa
+        private void cb_MN_Checked(object sender, RoutedEventArgs e)
+        {
+            cb_M.IsChecked = false;
+            cb_H.IsChecked = false;
+            cb_K.IsChecked = false;
+            cb_SZE.IsChecked = false;
+            cb_CS.IsChecked = false;
+            cb_P.IsChecked = false;
+            cb_SZO.IsChecked = false;
+            cb_V.IsChecked = false;
+            cb_MN.IsChecked = true;
+        }
+
+        // "Minden nap" checkboxon kívül bármelyik másik nap checkbox bepipálása event, kényelmi funkcióként a "Minden nap" checkbox-ból eltűnik a pipa
+        private void NOT_cb_MN_Checked(object sender, RoutedEventArgs e)
+        {
+            cb_MN.IsChecked = false;
         }
 
         // Enter lenyomása event, ha a kurzor a "Riport" szerkeszthető mezőben van:
@@ -314,7 +335,7 @@ namespace RunSqlNew
             if (!Application.Current.Windows.OfType<SqlWindow>().Any(w => w.GetType().Equals(typeof(SqlWindow))))
             {
                 SqlWindow sqlwindow = new SqlWindow();
-                sqlwindow.SettingLogic(ref this.Logic);
+                sqlwindow.SettingLogic(/*ref */this.Logic);
                 sqlwindow.Show();
                 sqlwindow.Focus();
             }
@@ -389,7 +410,7 @@ namespace RunSqlNew
                 Logic.Riports[Logic.selectedRow].Címek = textbox_Email.Text;      // Az eredeti programban ennek a kitöltése nem kötelező !!!!!!!!!!!!!!!!!!!!!!!!
 
                 // Gyakoriság formátum ellenőrzés
-                // feltehetően nem kell majd a hibaüzenet, ha nincs kijelölve semmi
+                // feltehetően nem kell majd a hibaüzenet, ha nincs kijelölve semmi!
                 if (rb_RepFreqHavi.IsChecked == true)
                     Logic.Riports[Logic.selectedRow].H_H_N_E = "0";
                 else if (rb_RepFreqHeti.IsChecked == true)
@@ -494,13 +515,96 @@ namespace RunSqlNew
             return true;
         }
 
-        // Hozzáad gomb lenyomására adott reakció
+        // Hozzáad gomb lenyomása event
+        // KELL MÉG FORMÁTUM ELLENŐRZÉS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         private void button_Hozzaad_Click(object sender, RoutedEventArgs e)
         {
+            // Havi/Heti/Napi/Egyszeri gyakoriság kinyerése
+            string RiportFrequencytoAdd = "3";
+            if ((bool)rb_RepFreqHavi.IsChecked)
+                RiportFrequencytoAdd = "0";
+            if ((bool)rb_RepFreqHeti.IsChecked)
+                RiportFrequencytoAdd = "1";
+            if ((bool)rb_RepFreqNapi.IsChecked)
+                RiportFrequencytoAdd = "2";
 
+            // Dátum jelző kinyerése
+            string DatumJelzotoAdd = "0";
+            if ((bool)CB_DatumJelzo.IsChecked)
+                DatumJelzotoAdd = "1";
+
+            // Napok kinyerése
+            // while ciklus azért kell, hogy akkor, ha olyan eset fordul elő, amikor nem szükséges a hátralévő checkboxok ellenőrzése,
+            // könnyen átugorhatók legyenek a fölösleges kiértékelések break; paranccsal, goto nélkül
+            bool onlyOnce = true;
+            string NapoktoAdd = "";
+            while (onlyOnce == true)
+            {
+                onlyOnce = false;
+
+                if ((bool)cb_MN.IsChecked)
+                {
+                    NapoktoAdd = "01111111";
+                    break;
+                }    
+                    
+                if ((bool)cb_M.IsChecked)
+                {
+                    NapoktoAdd = "10000000";
+                    break;
+                }
+                else
+                    NapoktoAdd = NapoktoAdd + "0";
+
+                if ((bool)cb_H.IsChecked)
+                    NapoktoAdd = NapoktoAdd + "1";
+                else
+                    NapoktoAdd = NapoktoAdd + "0";
+
+                if ((bool)cb_K.IsChecked)
+                    NapoktoAdd = NapoktoAdd + "1";
+                else
+                    NapoktoAdd = NapoktoAdd + "0";
+
+                if ((bool)cb_SZE.IsChecked)
+                    NapoktoAdd = NapoktoAdd + "1";
+                else
+                    NapoktoAdd = NapoktoAdd + "0";
+
+                if ((bool)cb_CS.IsChecked)
+                    NapoktoAdd = NapoktoAdd + "1";
+                else
+                    NapoktoAdd = NapoktoAdd + "0";
+
+                if ((bool)cb_P.IsChecked)
+                    NapoktoAdd = NapoktoAdd + "1";
+                else
+                    NapoktoAdd = NapoktoAdd + "0";
+
+                if ((bool)cb_SZO.IsChecked)
+                    NapoktoAdd = NapoktoAdd + "1";
+                else
+                    NapoktoAdd = NapoktoAdd + "0";
+
+                if ((bool)cb_V.IsChecked)
+                    NapoktoAdd = NapoktoAdd + "1";
+                else
+                    NapoktoAdd = NapoktoAdd + "0";
+            }
+
+            // Engedélyezve checkbox kinyerése
+            string EngtoAdd = "1";
+            if (!(bool)CB_engedelyezve.IsChecked)
+                EngtoAdd = "0";
+
+            Riports toAdd = new Riports(textbox_Date.Text, textbox_Time.Text, textbox_Riport.Text, textbox_XLSKVT.Text, textbox_XLSnev.Text, 
+                                        textbox_Email.Text, RiportFrequencytoAdd, DatumJelzotoAdd, NapoktoAdd, EngtoAdd);
+            Logic.addRiport(toAdd);
+            //DatasInWindow.Items.Refresh();
+            //InitializeComponent();
         }
 
-        // Mégsem gomb lenyomására adott reakció
+        // Mégsem gomb lenyomása event
         // Törli az riport kijelölést
         private void button_Megsem_Click(object sender, RoutedEventArgs e)
         {
@@ -508,7 +612,7 @@ namespace RunSqlNew
             Logic.selectedRow = -1;     // ez kell???
         }
 
-        // Törlés gomb lenyomására adott reakció
+        // Törlés gomb lenyomása event
         // Törli az éppen kijelölt riportot
         private void button_Torol_Click(object sender, RoutedEventArgs e)
         {
@@ -516,7 +620,7 @@ namespace RunSqlNew
             DatasInWindow.Items.Refresh();
         }
 
-        // Most gomb lenyomására adott reakció
+        // Most gomb lenyomása event
         // a kijelölt riport példány idejét az aktuális időre állítja
         private void button_Most_Click(object sender, RoutedEventArgs e)
         {

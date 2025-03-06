@@ -10,6 +10,10 @@ using System.Text;
 using System.Threading.Tasks;
 using ClosedXML.Excel;
 using System.Data.Odbc;
+using DocumentFormat.OpenXml.Vml;
+using System.IO;
+using DocumentFormat.OpenXml.Bibliography;
+using System.ComponentModel;
 
 namespace Logic
 {
@@ -38,6 +42,8 @@ namespace Logic
             // "C:\\Users\\GégényAttilaGábor\\Documents\\runsqltest.xlsx"
             selectedRow = -1;
 
+            Riports = new ObservableCollection<Riports>();
+
             this.RiportsBuilder();
 
             //RiportsBuilder();
@@ -57,6 +63,7 @@ namespace Logic
         }
 
         // Adatok kiszedése az elérési úttal megadott excel file-ból
+        // HASZNÁLATON KÍVÜL!!!!!!!!!!!!!!!!!!!
         public void DatasSetup(string path)
         {
             // valamiért átmegy az ellenőrzés
@@ -163,6 +170,95 @@ namespace Logic
             #endregion
         }
 
+        /*
+        public void addRiport()
+        {
+            string riportsPath = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "Riportok.ini");
+
+            const Int32 BufferSize = 1024;
+            using (var fileStream = File.OpenWrite(riportsPath))
+            using (var streamReader = new StreamReader(fileStream, Encoding.UTF8, true, BufferSize))
+            {
+                int riportsHelperListCount = 0;
+
+                string line;
+
+                // .ini fájlon végigiterálás
+                // (Ez a while csak riportok számát keresi ki)
+                while ((line = streamReader.ReadLine()) != null)
+                {
+                    // CSAK AKKOR HOZZA LÉTRE A MEGFELELŐ SZÁMÚ (üres) "Riports" PÉLDÁNYOKBÓL ÁLLÓ LISTÁT,
+                    // HA BENNE VAN A "RiportNR" sor, ami megmondja, hogy hány különböző riport van
+                    if (line.Contains("RiportNR"))
+                    {
+                        string[] splitHelper = line.Split('=');
+                        riportsHelperListCount = Int32.Parse(splitHelper[1]);
+                        splitHelper[1].Replace(int.Parse(splitHelper[1].ToString()))
+
+                        break;
+                    }
+                }
+
+                byte[] info = new UTF8Encoding(true).GetBytes(value);
+                fileStream.Write(info, 0, info.Length);
+            }
+        }
+        */
+
+        // .ini fájl elején lévő RiportNR változót növeli
+        // (használható lenne az "Hozzáad" gomb új elemének beírásához is???)
+        public void addRiport(Riports newRiport)
+        {
+            string filePath = "Riportok.ini";
+            string tempFile = "riportok_temphelp.ini";
+            string searchText = "RiportNR";  // The line that contains this text will be modified
+            string newLine = ""; // The new line content
+
+            using (StreamReader reader = new StreamReader(filePath, Encoding.UTF8))
+            using (StreamWriter writer = new StreamWriter(tempFile, false, Encoding.UTF8))
+            {
+                string line;
+                int riportNum = 0;
+                while ((line = reader.ReadLine()) != null)
+                {
+                    if (line.StartsWith(searchText))  // Modify only the matching line
+                    {
+                        string[] splitHelper = line.Split('=');
+                        int temp = int.Parse(splitHelper[1]);
+                        riportNum = temp + 1;
+                        newLine = "RiportNR=" + riportNum.ToString();
+                        writer.WriteLine(newLine);
+                    }
+                    else
+                    {
+                        writer.WriteLine(line);
+                    }
+                }
+
+                riportNum--;
+
+                // Új riport attribútumainak egyenkénti beírása
+                writer.WriteLine("Datum" + riportNum + '=' + newRiport.Dátum);
+                writer.WriteLine("Ido" + riportNum + '=' + newRiport.Idő);
+                writer.WriteLine("Riport" + riportNum + '=' + newRiport.Riport);
+                writer.WriteLine("XLSDir" + riportNum + '=' + newRiport.XLS_KVT);
+                writer.WriteLine("XLS" + riportNum + '=' + newRiport.XLS_NÉV);
+                writer.WriteLine("Email" + riportNum + '=' + newRiport.Címek);
+                writer.WriteLine("HaviHetiNapi" + riportNum + '=' + newRiport.H_H_N_E);
+                writer.WriteLine("DatumFlag" + riportNum + '=' + newRiport.DF);
+                writer.WriteLine("Munkanap" + riportNum + '=' + newRiport.M_nap);
+                writer.WriteLine("Engedely" + riportNum + '=' + newRiport.Eng);
+            }
+
+            // Új riport adatainak felvitele
+
+            // Replace the original file with the modified one
+            File.Delete(filePath);
+            File.Move(tempFile, filePath);
+
+            //Console.WriteLine("File updated successfully!");
+        }
+
         // Riportokat feldolgozó metódus
         // Átdolgozandó !!!
         private void RiportsBuilder()
@@ -188,7 +284,7 @@ namespace Logic
 
             // .ini fájl elérési útjának kinyerése
             // C:\Users\gegeny.gabor\source\repos\gegenyattila\RunSqlNew\RunSqlNew\bin\Debug\net6.0-windows
-            string riportsPath = Path.Combine(Directory.GetCurrentDirectory(), "Riportok.ini");
+            string riportsPath = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "Riportok.ini");
 
             // Elérési út helyességének ellenőrzése
             bool ok1 = PathExistance(riportsPath);

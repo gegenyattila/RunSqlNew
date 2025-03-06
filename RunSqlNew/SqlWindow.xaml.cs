@@ -44,7 +44,7 @@ namespace RunSqlNew
         // Logic példány fogadása a főablaktól
         // Jelenleg ezt a metódust kívülről kell meghívni. Nem lehet máshogy átadni a Logic példányt,
         // hogy ne a MainWindow.xaml.cs-ből kelljen meghívni ???
-        public void SettingLogic(ref IRunSqlLogic logic)
+        public void SettingLogic(/*ref*/ IRunSqlLogic logic)
         {
             this.Logic = logic;
         }

@@ -20,6 +20,7 @@ namespace Logic
         public void OdbcConnectionSetup(string sqlpath);
         public void ExcelAdapterAndSaver(DataTable dataTable);
         public string SqlQuery { get; set; }
+        public void addRiport(Riports newRiport);
         //public void SaveExcel();
     }
 }
